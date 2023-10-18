@@ -12,6 +12,7 @@ namespace GravityPong.Menu
         [SerializeField] private MenuButton SingleplayerButton;
         [SerializeField] private MenuButton MultiplayerButton;
         [SerializeField] private MenuButton SettingsButton;
+        [SerializeField] private MenuButton QuitButton;
 
         private MenuButton[] _buttons;
 
@@ -23,14 +24,18 @@ namespace GravityPong.Menu
 
         private void InitializeButtons()
         {
-            _buttons = new MenuButton[3] { SingleplayerButton, MultiplayerButton, SettingsButton };
+            _buttons = new MenuButton[4] { SingleplayerButton, MultiplayerButton, SettingsButton, QuitButton };
 
             SingleplayerButton.Button.onClick.AddListener(Singleplayer);
             MultiplayerButton.Button.onClick.AddListener(Multiplayer);
             SettingsButton.Button.onClick.AddListener(Settings);
+            QuitButton.Button.onClick.AddListener(Quit);
 
             foreach (var btn in _buttons)
                 btn.Initialize(this);
+
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+                QuitButton.gameObject.SetActive(false);
         }
         private void InitializeHighscoreText()
         {
@@ -62,6 +67,10 @@ namespace GravityPong.Menu
         private void Settings()
         {
             Debug.Log("Settings");
+        }
+        private void Quit()
+        {
+            Application.Quit();
         }
     }
 }
