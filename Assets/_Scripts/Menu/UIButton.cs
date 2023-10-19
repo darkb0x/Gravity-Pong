@@ -2,6 +2,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
+using System;
 
 namespace GravityPong.Menu
 {
@@ -15,8 +16,11 @@ namespace GravityPong.Menu
         [SerializeField] protected string Text;
         [SerializeField] protected TMP_Text ButtonText;
 
-        public virtual void Initialize()
+        public virtual void Initialize(Action onClick = null)
         {
+            if (onClick != null)
+                Button.onClick.AddListener(new UnityEngine.Events.UnityAction(onClick));
+
             Deselect();
         }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 namespace GravityPong.Menu
 {
@@ -11,11 +12,11 @@ namespace GravityPong.Menu
     {
         private MainMenu _mainMenu;
 
-        public void Initialize(MainMenu mainMenu)
+        public void Initialize(MainMenu mainMenu, Action onClick = null)
         {
             _mainMenu = mainMenu;
-            
-            Deselect();
+
+            base.Initialize(onClick);
         }
 
         public override void OnPointerEnter(PointerEventData eventData)

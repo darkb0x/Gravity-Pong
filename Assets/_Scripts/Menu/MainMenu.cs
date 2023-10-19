@@ -26,13 +26,13 @@ namespace GravityPong.Menu
         {
             _buttons = new MenuButton[4] { SingleplayerButton, MultiplayerButton, SettingsButton, QuitButton };
 
-            SingleplayerButton.Button.onClick.AddListener(Singleplayer);
-            MultiplayerButton.Button.onClick.AddListener(Multiplayer);
-            SettingsButton.Button.onClick.AddListener(Settings);
-            QuitButton.Button.onClick.AddListener(Quit);
-
             foreach (var btn in _buttons)
                 btn.Initialize(this);
+
+            SingleplayerButton.Initialize(this, Singleplayer);
+            MultiplayerButton.Initialize(this, Multiplayer);
+            SettingsButton.Initialize(this,Settings);
+            QuitButton.Initialize(this, Quit);
 
             if (Application.platform == RuntimePlatform.WebGLPlayer)
                 QuitButton.gameObject.SetActive(false);

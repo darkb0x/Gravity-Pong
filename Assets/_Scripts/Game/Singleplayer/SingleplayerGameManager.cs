@@ -15,6 +15,9 @@ namespace GravityPong.Game.Singleplayer
         [Space]
         [SerializeField] private Menu.UIButton LeaveButton;
 
+        [Header("Style")]
+        [SerializeField] private Stylemeter Stylemeter;
+
         public int Score 
         {
             get => _score;
@@ -57,7 +60,7 @@ namespace GravityPong.Game.Singleplayer
 
             _previousHighscore = PlayerPrefs.GetInt(Constants.HIGHSCORE_PLAYERPREFS_KEY);
 
-            LeaveButton.Button.onClick.AddListener(LeaveToMenu);
+            LeaveButton.Initialize(LeaveToMenu);
 
             SetDebugText("...");
 
@@ -73,11 +76,12 @@ namespace GravityPong.Game.Singleplayer
         {
             CurrentTime += Time.deltaTime;
         }
-
-        public void AddScore(int score)
+        public void AddScore(ScoreData data)
         {
-            Score += score;
+            Score += data.Score;
             Hits++;
+
+            Stylemeter.AddStyle(data.Style, data.StyleMessage);
         }
         public void ResetValues()
         {

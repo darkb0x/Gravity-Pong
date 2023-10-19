@@ -48,9 +48,12 @@ namespace GravityPong.Game
 
         private IEnumerator ReturnCoroutine()
         {
-            Vector3 targetPos = new Vector3(0, START_POS_Y, 0);
-            float returnSped = 2f;
+            Vector3 startPos = new Vector3(0, START_POS_Y, 0);
+            float returnSpeedLinear = 2f;
+            float returnSpeedLerp = 3f;
+            float minDistance = 0.05f;
 
+            // Set ball invulnerability
             SetTransparentcyToSprite(DISABLED_SPRITE_ALPHA);
             Trail.enabled = false;
             _rigidbody2D.velocity = Vector2.zero;
@@ -58,18 +61,27 @@ namespace GravityPong.Game
             BallCollider.isTrigger = true;
             _reboundsFromWallCount = 0;
 
-            while (transform.localPosition != targetPos)
+            // Move ball to the start position
+            while (transform.localPosition != startPos)
             {
+                if (Vector3.Distance(transform.localPosition, startPos) <= minDistance)
+                    transform.localPosition = Vector3.MoveTowards(transform.localPosition, startPos, returnSpeedLinear * Time.deltaTime);
+                else
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, startPos, returnSpeedLerp * Time.deltaTime);
+
                 yield return null;
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPos, returnSped * Time.deltaTime);
             }
 
+            // Return ball to normal state
             SetTransparentcyToSprite(1f);
             _rigidbody2D.isKinematic = false;
             BallCollider.isTrigger = false;
             Trail.Clear();
             Trail.enabled = true;
 
+            _rigidbody2D.velocity = new Vector2(Random.Range(-2, 2), 3f);
+
+            // Restart game
             SingleplayerGameManager.Instance?.ResetValues();
         }
 
@@ -93,22 +105,22 @@ namespace GravityPong.Game
 
                 if (dirForce <= 175) // bottom
                 {
-                    SingleplayerGameManager.Instance.AddScore(1);
+                    SingleplayerGameManager.Instance.AddScore(new ScoreData(1, 0.1f, "center"));
                     PlaySound(BounceSoundLow);
                 }
-                else if (dirForce > 175 && dirForce <= 200) // bottom-angle
+                else if (dirForce > 175 && dirForce <= 220) // bottom-angle
                 {
-                    SingleplayerGameManager.Instance.AddScore(3);
+                    SingleplayerGameManager.Instance.AddScore(new ScoreData(3, 0.2f, "near"));
                     PlaySound(BounceSoundMedium);
                 }
-                else if (dirForce > 200 && dirForce < 300) // angle
+                else if (dirForce > 220 && dirForce < 300) // angle
                 {
-                    SingleplayerGameManager.Instance.AddScore(5);
+                    SingleplayerGameManager.Instance.AddScore(new ScoreData(5, 0.5f, "angle"));
                     PlaySound(BounceSoundEpic);
                 }
                 else if(dirForce >= 300) // sides
                 {
-                    SingleplayerGameManager.Instance.AddScore(20);
+                    SingleplayerGameManager.Instance.AddScore(new ScoreData(17, 1f, "side"));
                     PlaySound(BounceSoundUltra);
                 }
 
