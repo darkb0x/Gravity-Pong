@@ -36,15 +36,15 @@ namespace GravityPong.Game.Singleplayer
             StylemeterImage.color = Color.Lerp(StylemeterImage.color, Color.white, STYLEMETER_IMAGE_COLOR_RETURN_TIME * Time.deltaTime);
         }
 
-        public void AddStyle(float value, string message)
+        public void AddStyle(ScoreData scoreData)
         {
-            _stylemeterValue = Mathf.Clamp01(_stylemeterValue + value);
+            _stylemeterValue = Mathf.Clamp01(_stylemeterValue + scoreData.Style);
 
             if (_styleHistory.Count == 5)
                 _styleHistory.RemoveAt(4);
 
-            Color color = StylemeterColors.Evaluate(value);
-            _styleHistory.Insert(0, $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>+{value} {message}</color>\n");
+            Color color = StylemeterColors.Evaluate(scoreData.Style);
+            _styleHistory.Insert(0, $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>+{scoreData.Score} {scoreData.StyleMessage}</color>\n");
             StylemeterImage.color = color;
 
             UpdateStyleHistory();

@@ -34,6 +34,8 @@ namespace GravityPong
             audioSource.Play();
             _coroutineRunner.RunCoroutine(ReturnAudioObjCoroutine(audioSource));
 
+            Debug.Log($"Audio of: {instance.gameObject.name} (clip: {clip.name})");
+
             return audioSource;
         }
 
@@ -45,7 +47,9 @@ namespace GravityPong
 
         private AudioSource SpawnAudioObj()
         {
-            return Object.Instantiate(SoundGOPrefab, _parentForAudioObj).GetComponent<AudioSource>();
+            var audio = Object.Instantiate(SoundGOPrefab, _parentForAudioObj).GetComponent<AudioSource>();
+
+            return audio;
         }
         private void GetAudioObj(AudioSource obj)
         {

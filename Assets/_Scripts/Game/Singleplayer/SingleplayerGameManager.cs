@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using GravityPong.Pause;
 
 namespace GravityPong.Game.Singleplayer
 {
@@ -17,6 +18,10 @@ namespace GravityPong.Game.Singleplayer
 
         [Header("Style")]
         [SerializeField] private Stylemeter Stylemeter;
+
+        [Header("Audio")]
+        [SerializeField] private AudioClip BounceSoundPerfectStart;
+        [SerializeField] private AudioClip BounceSoundPerfectEnd;
 
         public int Score 
         {
@@ -46,6 +51,11 @@ namespace GravityPong.Game.Singleplayer
             }
         }
 
+        private IAudioService _audioService;
+        private IPauseService _pauseService;
+
+        private CameraController _camera;
+
         private Color32 _defaultTextColor = new Color32(255, 255, 255, 255);
         private Color32 _newHighscoreTextColor = new Color32(255, 245, 90, 255);
         private float _currentTime;
@@ -58,14 +68,22 @@ namespace GravityPong.Game.Singleplayer
         {
             Instance = this;
 
+            _audioService = Services.Instance.Get<IAudioService>();
+            _pauseService = Services.Instance.Get<IPauseService>();
+
             _previousHighscore = PlayerPrefs.GetInt(Constants.HIGHSCORE_PLAYERPREFS_KEY);
 
             LeaveButton.Initialize(LeaveToMenu);
 
             SetDebugText("...");
+            ResetValues();
 
             if(!Application.isEditor)
                 DebugText.gameObject.SetActive(false);
+        }
+        private void Start()
+        {
+            _camera = FindObjectOfType<CameraController>();
         }
         private void OnDestroy()
         {
@@ -76,14 +94,25 @@ namespace GravityPong.Game.Singleplayer
         {
             CurrentTime += Time.deltaTime;
         }
-        public void AddScore(ScoreData data)
+        public void AddScore(ScoreData data, Transform instanceBall)
         {
             Score += data.Score;
             Hits++;
 
-            Stylemeter.AddStyle(data.Style, data.StyleMessage);
+            Stylemeter.AddStyle(data);
+
+            if(data.Style == ScoreData.MAX_STYLE)
+            {
+                _audioService.PlaySound(BounceSoundPerfectStart, transform);
+                _pauseService.Pause();
+                _camera.FocusOn(instanceBall, 5f, 0.9f, () =>
+                {
+                    _audioService.PlaySound(BounceSoundPerfectEnd, transform);
+                    _pauseService.Resume();
+                });
+            }
         }
-        public void ResetValues()
+        public void Restart()
         {
             if(Score > _previousHighscore)
             {
@@ -91,6 +120,12 @@ namespace GravityPong.Game.Singleplayer
                 _previousHighscore = PlayerPrefs.GetInt(Constants.HIGHSCORE_PLAYERPREFS_KEY);
             }
 
+            _camera.Shake(new Vector4(-10, 10, -4, 4), 1f, 0.7f);
+
+            ResetValues();
+        }
+        private void ResetValues()
+        { 
             Score = 0;
             Hits = 0;
             CurrentTime = 0;

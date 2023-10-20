@@ -2,6 +2,8 @@ namespace GravityPong.Game.Singleplayer
 {
     public struct ScoreData
     {
+        public const float MAX_STYLE = 1f;
+
         public int Score { get; }
         public float Style { get; }
         public string StyleMessage { get; }

@@ -1,3 +1,4 @@
+using GravityPong.Pause;
 using UnityEngine;
 
 namespace GravityPong.Player
@@ -6,19 +7,29 @@ namespace GravityPong.Player
     {
         [SerializeField] private float Speed = 2f;
 
-        private IInputService _input;
         private Rigidbody2D _rigidbody2D;
+
+        private IInputService _input;
+        private IPauseService _pauseService;
+
         private Vector2 _direction;
+        private bool _paused;
         private float _changeDirSpeed;
 
         private void Awake()
         {
-            _input = Services.Instance.Get<IInputService>();
             _rigidbody2D = GetComponent<Rigidbody2D>();
+
+            _input = Services.Instance.Get<IInputService>();
+            _pauseService = Services.Instance.Get<IPauseService>();
 
             _direction = Vector2.zero;
             _changeDirSpeed = .3f;
+
+            SubscribeToEvents();
         }
+        private void OnDestroy()
+            => UnsubscribeFromEvents();
 
         private void Update()
         {
@@ -35,7 +46,28 @@ namespace GravityPong.Player
 
         private void FixedUpdate()
         {
-            _rigidbody2D.velocity = _direction * Speed * Time.fixedDeltaTime;
+            if(!_paused)
+                _rigidbody2D.velocity = _direction * Speed * Time.fixedDeltaTime;
+        }
+
+        private void SubscribeToEvents()
+        {
+            _pauseService.OnPauseStateChanged += OnPauseStateChanged;
+
+            OnPauseStateChanged(_pauseService.PauseEnabled);
+        }
+        private void UnsubscribeFromEvents()
+        {
+            _pauseService.OnPauseStateChanged -= OnPauseStateChanged;
+        }
+        private void OnPauseStateChanged(bool pause)
+        {
+            _paused = pause;
+
+            if (pause)
+            {
+                _rigidbody2D.velocity = Vector2.zero;
+            }
         }
     }
 }
