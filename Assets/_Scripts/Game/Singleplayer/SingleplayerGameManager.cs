@@ -15,6 +15,9 @@ namespace GravityPong.Game.Singleplayer
         [SerializeField] private TMP_Text TimeText;
         [Space]
         [SerializeField] private Menu.UIButton LeaveButton;
+        [Space]
+        [SerializeField] private Menu.UIButton PauseButton;
+        [SerializeField] private PauseWindow PauseWindow;
 
         [Header("Style")]
         [SerializeField] private Stylemeter Stylemeter;
@@ -73,7 +76,9 @@ namespace GravityPong.Game.Singleplayer
 
             _previousHighscore = PlayerPrefs.GetInt(Constants.HIGHSCORE_PLAYERPREFS_KEY);
 
+            PauseWindow.Initialize();
             LeaveButton.Initialize(LeaveToMenu);
+            PauseButton.Initialize(PauseWindow.Open);
 
             SetDebugText("...");
             ResetValues();
@@ -81,9 +86,12 @@ namespace GravityPong.Game.Singleplayer
             if(!Application.isEditor)
                 DebugText.gameObject.SetActive(false);
         }
+
         private void Start()
         {
             _camera = FindObjectOfType<CameraController>();
+
+            PauseWindow.Close();
         }
         private void OnDestroy()
         {
@@ -93,6 +101,14 @@ namespace GravityPong.Game.Singleplayer
         private void Update()
         {
             CurrentTime += Time.deltaTime;
+
+            if(!_pauseService.PauseEnabled)
+            {
+                if(Input.GetKeyDown(KeyCode.Escape))
+                {
+                    PauseWindow.Open();
+                }
+            }
         }
         public void AddScore(ScoreData data, Transform instanceBall)
         {
@@ -131,6 +147,7 @@ namespace GravityPong.Game.Singleplayer
             CurrentTime = 0;
         }
 
+
         public void SetDebugText(string text)
         {
             DebugText.text = text;
@@ -151,7 +168,7 @@ namespace GravityPong.Game.Singleplayer
         }
         private void UpdateHitsText(int value)
         {
-            HitsText.text = $"Hist: {value}";
+            HitsText.text = $"Hits: {value}";
         }
         private void UpdateTimeText(float value)
         {

@@ -24,6 +24,9 @@ namespace GravityPong.Game
         [SerializeField] private AudioClip BounceSoundMedium; // 176-200 force
         [SerializeField] private AudioClip BounceSoundEpic; // 201-300 force
 
+        [Header("Particles")]
+        [SerializeField] private BallParticles BallParticles;
+
         private Rigidbody2D _rigidbody2D;
         
         private IAudioService _audioService;
@@ -85,6 +88,9 @@ namespace GravityPong.Game
             // Move ball to the start position
             while (transform.localPosition != startPos && _isReturning)
             {
+                if (_pauseService.PauseEnabled)
+                    yield return null;
+
                 if (Vector3.Distance(transform.localPosition, startPos) <= minDistance)
                     transform.localPosition = Vector3.MoveTowards(transform.localPosition, startPos, returnSpeedLinear * Time.deltaTime);
                 else
@@ -153,6 +159,7 @@ namespace GravityPong.Game
                 }
 
                 _reboundsFromWallCount = 0;
+                BallParticles.PlayHit(new Vector3(transform.position.x, coll.transform.position.y));
             }
             else
             {
