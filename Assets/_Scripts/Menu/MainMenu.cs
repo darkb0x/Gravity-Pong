@@ -14,12 +14,23 @@ namespace GravityPong.Menu
         [SerializeField] private MenuButton SettingsButton;
         [SerializeField] private MenuButton QuitButton;
 
+        [Header("Panels")]
+        [SerializeField] private UIPanelNavigator UIPanelNavigator;
+        [SerializeField] private GameObject MainMenuViewObj;
+        [SerializeField] private GameObject SettingsViewObj;
+
         private MenuButton[] _buttons;
 
         private void Awake()
         {
+            UIPanelNavigator.Initialize(MainMenuViewObj, new GameObject[2] { MainMenuViewObj, SettingsViewObj });
+
             InitializeButtons();
             InitializeHighscoreText();
+        }
+        private void Start()
+        {
+            UIPanelNavigator.Open(MainMenuViewObj);
         }
 
         private void InitializeButtons()
@@ -39,10 +50,10 @@ namespace GravityPong.Menu
         }
         private void InitializeHighscoreText()
         {
-            if (!PlayerPrefs.HasKey(Constants.HIGHSCORE_PLAYERPREFS_KEY))
-                PlayerPrefs.SetInt(Constants.HIGHSCORE_PLAYERPREFS_KEY, 0);
+            if (!PlayerPrefs.HasKey(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY))
+                PlayerPrefs.SetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY, 0);
 
-            int highscore = PlayerPrefs.GetInt(Constants.HIGHSCORE_PLAYERPREFS_KEY);
+            int highscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY);
             HighscoreText.text = $"Highscore: {highscore}";
         }
 
@@ -57,7 +68,7 @@ namespace GravityPong.Menu
 
         private void Singleplayer()
         {
-            Services.Instance.Get<ISceneLoader>().LoadScene(Constants.SINGLEPLAYER_SCENE_NAME);
+            Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.SINGLEPLAYER_SCENE_NAME);
             SingleplayerButton.Button.interactable = false;
         }
         private void Multiplayer()
@@ -66,7 +77,7 @@ namespace GravityPong.Menu
         }
         private void Settings()
         {
-            Debug.Log("Settings");
+            UIPanelNavigator.Open(SettingsViewObj);
         }
         private void Quit()
         {

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using GravityPong.Menu.Settings;
 
 namespace GravityPong.Game
 {
@@ -10,11 +11,11 @@ namespace GravityPong.Game
     {
         private const float INITIAL_CAMERA_VIEW_SIZE = 5f;
 
-        [SerializeField] private PostProcessVolume Volume;
+        [SerializeField] private PostProcessLayer PostProcessLayer;
+        [SerializeField] private PostProcessVolume StopTimePostProcessVolume;
 
         private Camera _camera;
-
-        private ColorGrading _colorGradingPostProcess;
+        private ISettingsData _settingsData;
 
         private Coroutine _focusOnCoroutine;
         private Coroutine _shakeCoroutine;
@@ -25,14 +26,17 @@ namespace GravityPong.Game
         private void Awake()
         {
             _camera = GetComponent<Camera>();
-
-            Volume.profile.TryGetSettings(out _colorGradingPostProcess);
+            _settingsData = Services.Instance.Get<ISettingsData>();
 
             _initialPosition = transform.position;
 
             _camera.orthographicSize = INITIAL_CAMERA_VIEW_SIZE;
-            Volume.weight = 0f;
+            StopTimePostProcessVolume.weight = 0f;
+
+            SubscrubeToEvents();
         }
+        private void OnDestroy()
+            => UnsubscribeFromEvents();
 
         private void Update()
         {
@@ -49,6 +53,9 @@ namespace GravityPong.Game
         }
         public void Shake(Vector4 range, float speed, float duration)
         {
+            if (!_settingsData.CameraShaking)
+                return;
+
             if(_shakeCoroutine != null)
                 StopCoroutine(_shakeCoroutine);
 
@@ -66,7 +73,7 @@ namespace GravityPong.Game
 
             while(Time.unscaledTime < endTime)
             {
-                Volume.weight = Mathf.Lerp(Volume.weight, 1, speed * Time.deltaTime);
+                StopTimePostProcessVolume.weight = Mathf.Lerp(StopTimePostProcessVolume.weight, 1, speed * Time.deltaTime);
 
                 _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, focusedCameraSize, speed * Time.deltaTime);
                 transform.position = Vector3.Lerp(transform.position, targetPos, positionMoveSpeed * Time.deltaTime);
@@ -119,7 +126,23 @@ namespace GravityPong.Game
             _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, INITIAL_CAMERA_VIEW_SIZE, returnSizeSpeed * Time.deltaTime);
             transform.position = Vector3.Lerp(transform.position, _initialPosition, returnPositionSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, returnRotationSpeed * Time.deltaTime);
-            Volume.weight = Mathf.Lerp(Volume.weight, 0f, returnVolumeSpeed * Time.deltaTime);
+            StopTimePostProcessVolume.weight = Mathf.Lerp(StopTimePostProcessVolume.weight, 0f, returnVolumeSpeed * Time.deltaTime);
+        }
+
+        private void SubscrubeToEvents()
+        {
+            _settingsData.OnPostProcessSettingsChanges += OnPostProcessEnableChange;
+
+            OnPostProcessEnableChange(_settingsData.PostProccesingEnabled);
+        }
+        private void UnsubscribeFromEvents()
+        {
+            _settingsData.OnPostProcessSettingsChanges -= OnPostProcessEnableChange;
+        }
+
+        private void OnPostProcessEnableChange(bool value)
+        {
+            PostProcessLayer.enabled = value;
         }
     }
 }

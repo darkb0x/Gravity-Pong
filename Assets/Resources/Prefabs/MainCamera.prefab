@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1663535347699293354}
   - component: {fileID: 3916284368122754104}
   m_Layer: 3
-  m_Name: ColorGrandingVolume
+  m_Name: StopTimeVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,7 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ac1287237dcf4a42be7fbbc3e8b9fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Volume: {fileID: 3916284368122754104}
+  PostProcessLayer: {fileID: 3891155650990745926}
+  StopTimePostProcessVolume: {fileID: 3916284368122754104}
 --- !u!20 &2564919147712440823
 Camera:
   m_ObjectHideFlags: 0

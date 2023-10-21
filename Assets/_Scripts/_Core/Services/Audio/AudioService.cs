@@ -34,8 +34,6 @@ namespace GravityPong
             audioSource.Play();
             _coroutineRunner.RunCoroutine(ReturnAudioObjCoroutine(audioSource));
 
-            Debug.Log($"Audio of: {instance.gameObject.name} (clip: {clip.name})");
-
             return audioSource;
         }
 

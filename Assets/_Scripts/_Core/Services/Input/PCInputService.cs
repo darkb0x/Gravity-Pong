@@ -5,6 +5,6 @@ namespace GravityPong
     public class PCInputService : IInputService
     {
         public float GetHorizontal()
-            => Input.GetAxisRaw(Constants.HORIZONTAL);
+            => Input.GetAxisRaw(Constants.Input.HORIZONTAL);
     }
 }

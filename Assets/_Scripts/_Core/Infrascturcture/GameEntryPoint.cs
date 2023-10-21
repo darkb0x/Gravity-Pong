@@ -1,3 +1,4 @@
+using GravityPong.Menu.Settings;
 using GravityPong.Pause;
 using System.Collections;
 using UnityEngine;
@@ -31,6 +32,7 @@ namespace GravityPong.Infrasturcture
             _services.Register<ICoroutineRunner>(this);
             _services.Register<IAudioService>(new AudioService(gameObject, _services.Get<ICoroutineRunner>()));
             _services.Register<ISceneLoader>(new SceneLoader(_services.Get<ICoroutineRunner>()));
+            _services.Register<ISettingsData>(new SettingsData());
             _services.Register<IPauseService>(new PauseService());
         }
 

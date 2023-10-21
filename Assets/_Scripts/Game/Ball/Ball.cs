@@ -72,9 +72,13 @@ namespace GravityPong.Game
             float returnSpeedLerp = 3f;
             float minDistance = 0.05f;
 
+            SingleplayerGameManager.Instance?.StopTimer();
+            
             // Restart game
             if(isGameLoop)
+            {
                 SingleplayerGameManager.Instance?.Restart();
+            }
 
             // Set ball invulnerability
             _isReturning = true;
@@ -115,6 +119,8 @@ namespace GravityPong.Game
             {
                 _rigidbody2D.velocity = new Vector2(1.5f, 3f);
             }
+
+            SingleplayerGameManager.Instance?.StartTimer();        
         }
 
         private void SetTransparentcyToSprite(float alpha)
@@ -137,7 +143,7 @@ namespace GravityPong.Game
 
                 if(_rigidbody2D.bodyType != RigidbodyType2D.Static)
                     _rigidbody2D.velocity = dir;
-
+                
                 if (dirForce <= 175) // bottom
                 {
                     AddScore(0.25f);
