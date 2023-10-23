@@ -8,18 +8,8 @@ namespace GravityPong.Game.Singleplayer
     {
         public static SingleplayerGameManager Instance;
 
-        [SerializeField] private TMP_Text DebugText;
-        [Space]
-        [SerializeField] private TMP_Text ScoreText;
-        [SerializeField] private TMP_Text HitsText;
-        [SerializeField] private TMP_Text TimeText;
-        [Space]
-        [SerializeField] private Menu.UIButton LeaveButton;
-        [Space]
-        [SerializeField] private Menu.UIButton PauseButton;
-        [SerializeField] private PauseWindow PauseWindow;
-
-        [Header("Style")]
+        [Header("HUD")]
+        [SerializeField] private SingleplayerGameHUD HUD;
         [SerializeField] private Stylemeter Stylemeter;
 
         [Header("Audio")]
@@ -32,7 +22,7 @@ namespace GravityPong.Game.Singleplayer
             set 
             {
                 _score = value;
-                UpdateScoreText(_score);
+                HUD.UpdateScoreText(_score, _previousHighscore);
             }
         }
         public int Hits
@@ -41,7 +31,7 @@ namespace GravityPong.Game.Singleplayer
             set
             {
                 _hits = value;
-                UpdateHitsText(_hits);
+                HUD.UpdateHitsText(_hits);
             }
         }
         public float CurrentTime
@@ -50,7 +40,7 @@ namespace GravityPong.Game.Singleplayer
             set
             {
                 _currentTime = value;
-                UpdateTimeText(_currentTime);
+                HUD.UpdateTimeText(_currentTime);
             }
         }
 
@@ -77,24 +67,18 @@ namespace GravityPong.Game.Singleplayer
 
             _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY);
 
-            PauseWindow.Initialize();
-            LeaveButton.Initialize(LeaveToMenu);
-            PauseButton.Initialize(PauseWindow.Open);
+            HUD.Initialize(LeaveToMenu);
+            HUD.SetDebugText("...");
 
-            SetDebugText("...");
-            ResetValues();
             CurrentTime = 0f;
-
-            if(!Application.isEditor)
-                DebugText.gameObject.SetActive(false);
         }
-
         private void Start()
         {
             _camera = FindObjectOfType<CameraController>();
 
-            PauseWindow.Close();
+            HUD.ClosePause();
         }
+
         private void OnDestroy()
         {
             Instance = null;
@@ -109,12 +93,21 @@ namespace GravityPong.Game.Singleplayer
                 
                 if(Input.GetKeyDown(KeyCode.Escape))
                 {
-                    PauseWindow.Open();
+                    HUD.OpenPause();
                 }
             }
         }
-        public void AddScore(ScoreData data, Transform instanceBall)
+
+        private void OnApplicationFocus(bool focus)
         {
+            if(!Application.isEditor && !focus && !_pauseService.PauseEnabled)
+                HUD.OpenPause();
+        }
+
+        public void AddScore(float style, Transform instanceBall)
+        {
+            ScoreData data = CalculateScoreDataFromStyle(style);
+
             Score += data.Score;
             Hits++;
 
@@ -131,6 +124,7 @@ namespace GravityPong.Game.Singleplayer
                 });
             }
         }
+
         public void Restart()
         {
             if(Score > _previousHighscore)
@@ -141,7 +135,8 @@ namespace GravityPong.Game.Singleplayer
 
             _camera.Shake(new Vector4(-10, 10, -4, 4), 1f, 0.7f);
 
-            ResetValues();
+            Score = 0;
+            Hits = 0;
         }
 
         public void StopTimer()
@@ -154,49 +149,38 @@ namespace GravityPong.Game.Singleplayer
             CurrentTime = 0;
         }
 
-        private void ResetValues()
-        { 
-            Score = 0;
-            Hits = 0;
-        }
-
-
-        public void SetDebugText(string text)
+        private ScoreData CalculateScoreDataFromStyle(float style)
         {
-            DebugText.text = text;
-        }
+            int score;
+            string styleMessage;
 
-        private void UpdateScoreText(int score)
-        {
-            if(Score > _previousHighscore)
+            switch (style)
             {
-                ScoreText.color = _newHighscoreTextColor;
-                ScoreText.text = score.ToString() + "!";
+                case 0.25f:
+                    score = 1;
+                    styleMessage = "center";
+                    break;
+                case 0.5f:
+                    score = 3;
+                    styleMessage = "side";
+                    break;
+                case 0.75f:
+                    score = 5;
+                    styleMessage = "edge";
+                    break;
+                case 1f:
+                    score = 20;
+                    styleMessage = "vertical";
+                    break;
+                default:
+                    goto case 0.25f;
             }
-            else
-            {
-                ScoreText.color = _defaultTextColor;
-                ScoreText.text = score.ToString();
-            }
-        }
-        private void UpdateHitsText(int value)
-        {
-            HitsText.text = $"Hits: {value}";
-        }
-        private void UpdateTimeText(float value)
-        {
-            TimeText.text = $"Time: {value.ToString("F1")}s";
-        }
 
+            return new ScoreData(score, style, styleMessage);
+        }
         private void LeaveToMenu()
         {
             Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.MAIN_MENU_SCENE_NAME);
-        }
-
-        private void OnApplicationFocus(bool focus)
-        {
-            if(!Application.isEditor && !focus && !_pauseService.PauseEnabled)
-                PauseWindow.Open();
         }
     }
 }

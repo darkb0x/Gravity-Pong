@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.EventSystems;
-using TMPro;
-using UnityEngine.UI;
 using System;
 
 namespace GravityPong.Menu

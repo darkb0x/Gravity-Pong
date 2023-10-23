@@ -257,6 +257,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51044210}
   m_CullTransparentMesh: 1
+--- !u!1 &152672516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 152672517}
+  - component: {fileID: 152672518}
+  m_Layer: 0
+  m_Name: GameHUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &152672517
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152672516}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1766797045}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &152672518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152672516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aabe6cde7a064bb42b5aecf113377720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugText: {fileID: 51044212}
+  ScoreText: {fileID: 222948367}
+  HitsText: {fileID: 2055420058}
+  TimeText: {fileID: 800908608}
+  LeaveButton: {fileID: 2060840634}
+  PauseButton: {fileID: 1232949988}
+  PauseWindow: {fileID: 1488018007}
 --- !u!1 &217006444
 GameObject:
   m_ObjectHideFlags: 0
@@ -3096,7 +3147,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 152672517}
   m_Father: {fileID: 969634005}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1766797046
@@ -3111,13 +3163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed2fd92d637c2a241b73dc2bb44e61d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugText: {fileID: 51044212}
-  ScoreText: {fileID: 222948367}
-  HitsText: {fileID: 2055420058}
-  TimeText: {fileID: 800908608}
-  LeaveButton: {fileID: 2060840634}
-  PauseButton: {fileID: 1232949988}
-  PauseWindow: {fileID: 1488018007}
+  HUD: {fileID: 152672518}
   Stylemeter: {fileID: 464862620}
   BounceSoundPerfectStart: {fileID: 8300000, guid: f0eaf74a545a2dc4ba43fd2a381a75ae, type: 3}
   BounceSoundPerfectEnd: {fileID: 8300000, guid: d5ddc8de7da918f4ea2caffc48657d05, type: 3}

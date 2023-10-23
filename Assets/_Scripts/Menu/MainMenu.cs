@@ -1,12 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using GravityPong.Infrasturcture;
 using TMPro;
 using UnityEngine;
+using GravityPong.UI;
+using GravityPong.Menu.Settings;
 
 namespace GravityPong.Menu
 {
-    public class MainMenu : MonoBehaviour
+    public class MainMenu : MonoBehaviour, IRequireEntryInitializing<UIPanelNavigator>
     {
+        public const UIPanelID MAINMENU_PANEL_ID = UIPanelID.Menu_Main;
+
         [SerializeField] private TMP_Text HighscoreText;
         [Space]
         [SerializeField] private MenuButton SingleplayerButton;
@@ -14,23 +17,17 @@ namespace GravityPong.Menu
         [SerializeField] private MenuButton SettingsButton;
         [SerializeField] private MenuButton QuitButton;
 
-        [Header("Panels")]
-        [SerializeField] private UIPanelNavigator UIPanelNavigator;
-        [SerializeField] private GameObject MainMenuViewObj;
-        [SerializeField] private GameObject SettingsViewObj;
-
         private MenuButton[] _buttons;
+        private UIPanelNavigator _uiPanelNavigator;
 
-        private void Awake()
+        public void Initialize(UIPanelNavigator uiPanelNavigator)
         {
-            UIPanelNavigator.Initialize(MainMenuViewObj, new GameObject[2] { MainMenuViewObj, SettingsViewObj });
+            _uiPanelNavigator = uiPanelNavigator;
 
             InitializeButtons();
             InitializeHighscoreText();
-        }
-        private void Start()
-        {
-            UIPanelNavigator.Open(MainMenuViewObj);
+
+            _uiPanelNavigator.Open(MAINMENU_PANEL_ID);
         }
 
         private void InitializeButtons()
@@ -40,9 +37,9 @@ namespace GravityPong.Menu
             foreach (var btn in _buttons)
                 btn.Initialize(this);
 
-            SingleplayerButton.Initialize(this, Singleplayer);
-            MultiplayerButton.Initialize(this, Multiplayer);
-            SettingsButton.Initialize(this,Settings);
+            SingleplayerButton.Initialize(this, OpenSingleplayer);
+            MultiplayerButton.Initialize(this, OpenMultiplayer);
+            SettingsButton.Initialize(this,OpenSettings);
             QuitButton.Initialize(this, Quit);
 
             if (Application.platform == RuntimePlatform.WebGLPlayer)
@@ -66,18 +63,18 @@ namespace GravityPong.Menu
             button.Select();
         }
 
-        private void Singleplayer()
+        private void OpenSingleplayer()
         {
             Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.SINGLEPLAYER_SCENE_NAME);
             SingleplayerButton.Button.interactable = false;
         }
-        private void Multiplayer()
+        private void OpenMultiplayer()
         {
             Debug.Log("Kys");
         }
-        private void Settings()
+        private void OpenSettings()
         {
-            UIPanelNavigator.Open(SettingsViewObj);
+            _uiPanelNavigator.Open(SettingsView.SETTINGS_PANEL_ID);
         }
         private void Quit()
         {

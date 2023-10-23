@@ -1367,50 +1367,6 @@ MonoBehaviour:
   Button: {fileID: 871246713}
   Text: Settings
   ButtonText: {fileID: 821497413}
---- !u!1 &886617886
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 886617888}
-  - component: {fileID: 886617887}
-  m_Layer: 0
-  m_Name: UIPanelNavigator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &886617887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 886617886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ff7e731cf4b93b42be8a271c3a39c26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &886617888
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 886617886}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2127968588}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &890997851
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,9 +1628,6 @@ MonoBehaviour:
   MultiplayerButton: {fileID: 900163386}
   SettingsButton: {fileID: 871246715}
   QuitButton: {fileID: 459358933}
-  UIPanelNavigator: {fileID: 886617887}
-  MainMenuViewObj: {fileID: 1779612398}
-  SettingsViewObj: {fileID: 1012871711}
 --- !u!1 &1012871711
 GameObject:
   m_ObjectHideFlags: 0
@@ -2040,8 +1993,6 @@ MonoBehaviour:
   PostPocessToggle: {fileID: 524066849}
   CameraShakingToggle: {fileID: 119594443}
   CloseSettingsButton: {fileID: 815303000}
-  UIPanelNavigator: {fileID: 886617887}
-  SettingViewObj: {fileID: 1012871711}
 --- !u!1 &1479923859
 GameObject:
   m_ObjectHideFlags: 0
@@ -3137,6 +3088,54 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7efaccc6bb74b7549aaee67d744f18a7, type: 3}
+--- !u!1 &1960439112
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1960439114}
+  - component: {fileID: 1960439113}
+  m_Layer: 0
+  m_Name: MainMenuEntryPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1960439113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960439112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d8e95488d3139842b02bbfe06502444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainMenuViewObj: {fileID: 1779612398}
+  SettingsViewObj: {fileID: 1012871711}
+  Menu: {fileID: 998370113}
+  Settings: {fileID: 1443187469}
+--- !u!4 &1960439114
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960439112}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 343.66025, y: 204.5208, z: -2.5001812}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2127968587
 GameObject:
   m_ObjectHideFlags: 0
@@ -3166,7 +3165,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 886617888}
   - {fileID: 998370112}
   - {fileID: 1443187468}
   m_Father: {fileID: 0}
@@ -3181,7 +3179,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1377247205668596532, guid: 21fbb81f77761c9408b5f791b6d2febe, type: 3}
       propertyPath: m_Name
-      value: EntryPoint
+      value: GameEntryPoint
       objectReference: {fileID: 0}
     - target: {fileID: 7742061593812093281, guid: 21fbb81f77761c9408b5f791b6d2febe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3234,6 +3232,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1907436901}
   - {fileID: 4859029926619467584}
+  - {fileID: 1960439114}
   - {fileID: 2127968588}
   - {fileID: 1142917247}
   - {fileID: 262600912}

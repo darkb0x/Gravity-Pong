@@ -27,6 +27,7 @@ namespace GravityPong.Pause
             }
         }
 
+        // I was forced to use Time.timeScale because of a bug
         public void Open()
         {
             _isOpened = true;

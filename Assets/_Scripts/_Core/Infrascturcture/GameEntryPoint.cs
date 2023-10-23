@@ -1,7 +1,9 @@
 using GravityPong.Menu.Settings;
 using GravityPong.Pause;
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GravityPong.Infrasturcture
 {
@@ -22,7 +24,10 @@ namespace GravityPong.Infrasturcture
             RegisterServices();
 
             DontDestroyOnLoad(this);
+
+            SceneManager.activeSceneChanged += OnSceneLoaded;
         }
+
 
         private void RegisterServices()
         {
@@ -42,6 +47,18 @@ namespace GravityPong.Infrasturcture
                 return new MobileInputService();
 
             return new PCInputService();
+        }
+        private void InitializeSceneEntryPoint()
+        {
+            SceneEntryPoint sceneEntryPoint = FindObjectOfType<SceneEntryPoint>();
+            if (sceneEntryPoint != null)
+            {
+                sceneEntryPoint.StartInitializing();
+            }
+        }
+        private void OnSceneLoaded(Scene arg0, Scene arg1)
+        {
+            InitializeSceneEntryPoint();
         }
 
         #region ICoroutineRunner

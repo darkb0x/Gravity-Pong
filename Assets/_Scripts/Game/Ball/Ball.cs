@@ -6,7 +6,6 @@ namespace GravityPong.Game
 {
     using GravityPong.Pause;
     using Singleplayer;
-    using Unity.VisualScripting;
 
     public class Ball : MonoBehaviour
     {
@@ -62,6 +61,19 @@ namespace GravityPong.Game
             }
         }
 
+        private void OnCollisionEnter2D(Collision2D coll)
+        {  
+            if(coll.gameObject.TryGetComponent(out PlayerContoller _))
+            {
+                BounceFromPlayer(coll);
+            }
+            else
+            {
+                BounceFromWall();
+            }
+        }
+
+        #region Restart Function
         private void Restart(bool isGameLoop = true)
             => StartCoroutine(ReturnCoroutine(isGameLoop));
 
@@ -73,21 +85,16 @@ namespace GravityPong.Game
             float minDistance = 0.05f;
 
             SingleplayerGameManager.Instance?.StopTimer();
-            
+
             // Restart game
-            if(isGameLoop)
+            if (isGameLoop)
             {
                 SingleplayerGameManager.Instance?.Restart();
             }
 
             // Set ball invulnerability
             _isReturning = true;
-
-            SetTransparentcyToSprite(DISABLED_SPRITE_ALPHA);
-            _rigidbody2D.velocity = Vector2.zero;
-            _rigidbody2D.isKinematic = true;
-            BallCollider.isTrigger = true;
-            _reboundsFromWallCount = 0;
+            DisableBall();
 
             // Move ball to the start position
             while (transform.localPosition != startPos && _isReturning)
@@ -106,12 +113,10 @@ namespace GravityPong.Game
             // Return ball to normal state
             _isReturning = false;
 
-            SetTransparentcyToSprite(1f);
-            _rigidbody2D.isKinematic = false;
-            BallCollider.isTrigger = false;
+            EnableBall();
 
             int randomValue = Random.Range(0, 2);
-            if(randomValue == 0)
+            if (randomValue == 0)
             {
                 _rigidbody2D.velocity = new Vector2(-1.5f, 3f);
             }
@@ -120,100 +125,86 @@ namespace GravityPong.Game
                 _rigidbody2D.velocity = new Vector2(1.5f, 3f);
             }
 
-            SingleplayerGameManager.Instance?.StartTimer();        
+            SingleplayerGameManager.Instance?.StartTimer();
         }
 
+        private void EnableBall()
+        {
+            SetTransparentcyToSprite(1f);
+            _rigidbody2D.isKinematic = false;
+            BallCollider.isTrigger = false;
+        }
+        private void DisableBall()
+        {
+
+            SetTransparentcyToSprite(DISABLED_SPRITE_ALPHA);
+            _rigidbody2D.velocity = Vector2.zero;
+            _rigidbody2D.isKinematic = true;
+            BallCollider.isTrigger = true;
+            _reboundsFromWallCount = 0;
+        }
         private void SetTransparentcyToSprite(float alpha)
         {
             BallSprite.color = new Color(1, 1, 1, alpha);
         }
+        #endregion
 
-        private void OnCollisionEnter2D(Collision2D coll)
-        {  
-            if(coll.gameObject.TryGetComponent(out PlayerContoller _))
-            {
-                float x = (transform.position - coll.transform.position).x;
-
-                float forceY = 8.5f;
-                float forceXFactor = 10f;
-                float gravity = 1.5f;
-                Vector2 dir = new Vector2(x * forceXFactor, forceY) * gravity;
-                float dirForce = dir.sqrMagnitude;
-                SingleplayerGameManager.Instance.SetDebugText("Force: " + dirForce);
-
-                if(_rigidbody2D.bodyType != RigidbodyType2D.Static)
-                    _rigidbody2D.velocity = dir;
-                
-                if (dirForce <= 175) // bottom
-                {
-                    AddScore(0.25f);
-                    PlaySound(BounceSoundLow);
-                }
-                else if (dirForce > 175 && dirForce <= 220) // bottom-angle
-                {
-                    AddScore(0.5f);
-                    PlaySound(BounceSoundMedium);
-                }
-                else if (dirForce > 220 && dirForce < 300) // angle
-                {
-                    AddScore(0.75f);
-                    PlaySound(BounceSoundEpic);
-                }
-                else if(dirForce >= 300) // sides
-                {
-                    AddScore(1f);
-                }
-
-                _reboundsFromWallCount = 0;
-                BallParticles.PlayHit(new Vector3(transform.position.x, coll.transform.position.y));
-            }
-            else
-            {
-                _reboundsFromWallCount++;
-
-                if(_reboundsFromWallCount >= 2)
-                {
-                    float velocityDivider = 2f;
-                    _rigidbody2D.velocity /= velocityDivider;
-                }
-
-                PlaySound(BounceFromWallSound);
-            }
-        }
-
-        private void PlaySound(AudioClip clip)
+        #region Bounces
+        private void BounceFromPlayer(Collision2D playerCollision)
         {
-            _audioService.PlaySound(clip, transform);
+            float x = (transform.position - playerCollision.transform.position).x;
+
+            float forceY = 8.5f;
+            float forceXFactor = 10f;
+            float gravity = 1.5f;
+            Vector2 dir = new Vector2(x * forceXFactor, forceY) * gravity;
+            float dirForce = dir.sqrMagnitude;
+
+            if (_rigidbody2D.bodyType != RigidbodyType2D.Static)
+                _rigidbody2D.velocity = dir;
+
+            if (dirForce <= 175) // bottom
+            {
+                AddScore(0.25f);
+                PlaySound(BounceSoundLow);
+            }
+            else if (dirForce > 175 && dirForce <= 220) // bottom-angle
+            {
+                AddScore(0.5f);
+                PlaySound(BounceSoundMedium);
+            }
+            else if (dirForce > 220 && dirForce < 300) // angle
+            {
+                AddScore(0.75f);
+                PlaySound(BounceSoundEpic);
+            }
+            else if (dirForce >= 300) // sides
+            {
+                AddScore(1f);
+            }
+
+            _reboundsFromWallCount = 0;
+            BallParticles.PlayHit(new Vector3(transform.position.x, playerCollision.transform.position.y));
         }
+
+        private void BounceFromWall()
+        {
+            _reboundsFromWallCount++;
+
+            if (_reboundsFromWallCount >= 2)
+            {
+                float velocityDivider = 2f;
+                _rigidbody2D.velocity /= velocityDivider;
+            }
+
+            PlaySound(BounceFromWallSound);
+        }
+
         private void AddScore(float style)
-        {
-            int score;
-            string styleMessage;
+            => SingleplayerGameManager.Instance.AddScore(style, transform);
+        #endregion
 
-            switch (style)
-            {
-                case 0.25f:
-                    score = 1;
-                    styleMessage = "center";
-                    break;
-                case 0.5f:
-                    score = 3;
-                    styleMessage = "side";
-                    break;
-                case 0.75f:
-                    score = 5;
-                    styleMessage = "edge";
-                    break;
-                case 1f:
-                    score = 20;
-                    styleMessage = "vertical";
-                    break;
-                default:
-                    goto case 0.25f;
-            }
-
-            SingleplayerGameManager.Instance.AddScore(new ScoreData(score, style, styleMessage), transform);
-        }
+        #region Events
         private void SubscribeToEvents()
         {
             _pauseService.OnPauseStateChanged += OnPauseStateChanged;
@@ -240,6 +231,12 @@ namespace GravityPong.Game
                 _rigidbody2D.bodyType = _savedRigidBody2DType;
                 _rigidbody2D.velocity = _savedVelocity;
             }
+        }
+        #endregion
+
+        private void PlaySound(AudioClip clip)
+        {
+            _audioService.PlaySound(clip, transform);
         }
     }
 }
