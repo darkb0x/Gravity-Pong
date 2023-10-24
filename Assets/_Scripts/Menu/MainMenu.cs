@@ -70,7 +70,7 @@ namespace GravityPong.Menu
         }
         private void OpenMultiplayer()
         {
-            Debug.Log("Kys");
+            _uiPanelNavigator.Open(MultiplayerView.MULTUPLAYER_PANEL_ID);
         }
         private void OpenSettings()
         {
