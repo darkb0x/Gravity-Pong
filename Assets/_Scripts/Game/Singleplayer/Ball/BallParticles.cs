@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GravityPong.Game
+namespace GravityPong.Game.Singleplayer.Ball
 {
     public class BallParticles : MonoBehaviour
     {

@@ -1,12 +1,10 @@
 using UnityEngine;
-using GravityPong.Player;
 using System.Collections;
+using GravityPong.Pause;
+using GravityPong.Game.Singleplayer.Player;
 
-namespace GravityPong.Game
+namespace GravityPong.Game.Singleplayer.Ball
 {
-    using GravityPong.Pause;
-    using Singleplayer;
-
     public class Ball : MonoBehaviour
     {
         private const float DEATH_ZONE_Y = -4f;

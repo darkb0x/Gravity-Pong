@@ -1,7 +1,7 @@
 using GravityPong.Pause;
 using UnityEngine;
 
-namespace GravityPong.Player
+namespace GravityPong.Game.Singleplayer.Player
 {
     public class PlayerContoller : MonoBehaviour
     {
