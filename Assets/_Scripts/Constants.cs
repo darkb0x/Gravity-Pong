@@ -17,6 +17,7 @@ namespace GravityPong
         {
             public const string MAIN_MENU_SCENE_NAME = "_MainMenu";
             public const string SINGLEPLAYER_SCENE_NAME = "SingleplayerScene";
+            public const string MULTIPLAYER_SCENE_NAME = "MultiplayerScene";
         }
     }
 }

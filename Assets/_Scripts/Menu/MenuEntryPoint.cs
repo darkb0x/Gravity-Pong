@@ -10,11 +10,9 @@ namespace GravityPong.Menu
     {
         [SerializeField] private GameObject MainMenuViewObj;
         [SerializeField] private GameObject SettingsViewObj;
-        [SerializeField] private GameObject MultiplayerViewObj;
         [Space]
         [SerializeField] private MainMenu Menu;
         [SerializeField] private SettingsView Settings;
-        [SerializeField] private MultiplayerView Multiplayer;
 
         protected override void InitializeEntries()
         {
@@ -22,13 +20,11 @@ namespace GravityPong.Menu
             {
                 [UIPanelID.Menu_Main] = MainMenuViewObj,
                 [UIPanelID.Menu_Settings] = SettingsViewObj,
-                [UIPanelID.Menu_Multiplayer] = MultiplayerViewObj,
             };
             UIPanelNavigator uiPanelNavigator = new UIPanelNavigator(MainMenuViewObj, uiPanels);
 
             Menu.Initialize(uiPanelNavigator);
             Settings.Initialize(uiPanelNavigator, Services.Instance.Get<ISettingsData>());
-            Multiplayer.Initialize(uiPanelNavigator);
         }
     }
 }
