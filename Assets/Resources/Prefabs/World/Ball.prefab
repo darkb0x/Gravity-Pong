@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1082506693913541222}
   - component: {fileID: 3135121585269384049}
-  - component: {fileID: 13656318188142579}
+  - component: {fileID: 9023273715464408856}
   - component: {fileID: 6967285411488980454}
   - component: {fileID: 7249000872132104229}
   m_Layer: 0
@@ -138,8 +138,8 @@ MonoBehaviour:
   BounceSoundLow: {fileID: 8300000, guid: 829d3db6a341c264dbf21ade37f3eb25, type: 3}
   BounceSoundMedium: {fileID: 8300000, guid: 186779622b5bfbc4d8aace86a9b8af81, type: 3}
   BounceSoundEpic: {fileID: 8300000, guid: 63bcafa1e16488e44b0a0bf2c4d3f94c, type: 3}
-  BallParticles: {fileID: 13656318188142579}
---- !u!114 &13656318188142579
+  BallParticles: {fileID: 9023273715464408856}
+--- !u!114 &9023273715464408856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,10 +148,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2143569650204189379}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6d709b0c2a866642adc21736c7c1d82, type: 3}
+  m_Script: {fileID: 11500000, guid: 5695577cd43593148a743cd2ef54a8d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HitWallParticlePrefab: {fileID: 3807798182897950018, guid: 77ee96619e995b44bba30c987a6ac0c6, type: 3}
+  HitWallParticlePrefab: {fileID: 3824119987748971379, guid: 0258bc24ca2b23c4cb1177c962aa070c, type: 3}
 --- !u!50 &6967285411488980454
 Rigidbody2D:
   serializedVersion: 4

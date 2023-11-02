@@ -4,5 +4,5 @@ namespace GravityPong.UI
     {
         Menu_Main,
         Menu_Settings,
-    }
+    } 
 }
