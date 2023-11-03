@@ -157,7 +157,6 @@ namespace GravityPong.Game.Singleplayer.Ball
             float gravity = 1.5f;
             Vector2 dir = new Vector2(x * forceXFactor, forceY) * gravity;
             float dirForce = dir.sqrMagnitude;
-            bool sideHit = false;
 
             if (_rigidbody2D.bodyType != RigidbodyType2D.Static)
                 _rigidbody2D.velocity = dir;
@@ -180,11 +179,9 @@ namespace GravityPong.Game.Singleplayer.Ball
             else if (dirForce >= 300) // sides
             {
                 AddScore(1f);
-                sideHit = true;
             }
 
             _reboundsFromWallCount = 0;
-            BallParticles.PlayHit(new Vector3(transform.position.x, playerCollision.transform.position.y), sideHit);
         }
 
         private void BounceFromWall()

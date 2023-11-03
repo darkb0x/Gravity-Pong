@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using GravityPong.Pause;
+using GravityPong.Game.Singleplayer.Ball;
 
 namespace GravityPong.Game.Singleplayer
 {
@@ -49,8 +50,6 @@ namespace GravityPong.Game.Singleplayer
 
         private CameraController _camera;
 
-        private Color32 _defaultTextColor = new Color32(255, 255, 255, 255);
-        private Color32 _newHighscoreTextColor = new Color32(255, 245, 90, 255);
         private bool _playTimer;
         private float _currentTime;
         private int _previousHighscore;
@@ -113,6 +112,7 @@ namespace GravityPong.Game.Singleplayer
 
             Stylemeter.AddStyle(data);
 
+            // 'slow-motion'
             if(data.Style == ScoreData.MAX_STYLE)
             {
                 _audioService.PlaySound(BounceSoundPerfectStart, transform);
@@ -121,6 +121,9 @@ namespace GravityPong.Game.Singleplayer
                 {
                     _audioService.PlaySound(BounceSoundPerfectEnd, transform);
                     _pauseService.Resume();
+
+                    var particle = BallParticlesController.Particles.Get();
+                    particle.Play(instanceBall.position, Quaternion.identity, false);
                 });
             }
         }

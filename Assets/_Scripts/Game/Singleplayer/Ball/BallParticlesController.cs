@@ -21,10 +21,10 @@ namespace GravityPong.Game.Singleplayer.Ball
                 Particles = new ObjectPool<BallParticle>(SpawnBallParticle, p => p.Show(), p => p.Hide(), PARTICLES_OBJECT_POOL_AMOUNT);
         }
 
-        public void PlayHit(Vector3 pos, bool isSideHit)
+        public void PlayHit(Vector3 pos)
         {
             var particle = Particles.Get();
-            particle.Play(pos, Quaternion.LookRotation(_rigidbody2D.velocity.normalized), !isSideHit);
+            particle.Play(pos, Quaternion.LookRotation(_rigidbody2D.velocity.normalized), true);
         }
 
         private BallParticle SpawnBallParticle()
