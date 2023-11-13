@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GravityPong.Utilities
 {
-    public class ObjectPool<TPoolObject>
+    public class ObjectPool<TPoolObject> where TPoolObject : class
     {
         private readonly Func<TPoolObject> _preloadFunc;
         private readonly Action<TPoolObject> _getAction;
