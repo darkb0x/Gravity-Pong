@@ -6,7 +6,7 @@ using GravityPong.Menu.Settings;
 
 namespace GravityPong.Menu
 {
-    public class MainMenu : MonoBehaviour, IRequireEntryInitializing<UIPanelNavigator>
+    public class MainMenu : MonoBehaviour
     {
         public const UIPanelID MAINMENU_PANEL_ID = UIPanelID.Menu_Main;
 

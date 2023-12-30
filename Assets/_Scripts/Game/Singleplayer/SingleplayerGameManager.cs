@@ -56,10 +56,10 @@ namespace GravityPong.Game.Singleplayer
         private int _score;
         private int _hits;
 
-
-        private void Awake()
+        public void Initialize(CameraController camera)
         {
             Instance = this;
+            _camera = camera;
 
             _audioService = Services.Instance.Get<IAudioService>();
             _pauseService = Services.Instance.Get<IPauseService>();
@@ -67,13 +67,10 @@ namespace GravityPong.Game.Singleplayer
             _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY);
 
             HUD.Initialize(LeaveToMenu);
+            Stylemeter.Initialize();
             HUD.SetDebugText("...");
 
             CurrentTime = 0f;
-        }
-        private void Start()
-        {
-            _camera = FindObjectOfType<CameraController>();
 
             HUD.ClosePause();
         }

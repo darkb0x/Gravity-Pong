@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -19,7 +20,7 @@ namespace GravityPong.Game.Singleplayer
         private List<string> _styleHistory;
         private float _stylemeterValue;
 
-        private void Awake()
+        public void Initialize()
         {
             _styleHistory = new();
             _stylemeterValue = 0f;
@@ -27,7 +28,6 @@ namespace GravityPong.Game.Singleplayer
             UpdateStyleTimeVisual(_stylemeterValue);
             UpdateStyleHistory();
         }
-
         private void Update()
         {
             _stylemeterValue = Mathf.Clamp01(_stylemeterValue -= SPEED * Time.deltaTime);

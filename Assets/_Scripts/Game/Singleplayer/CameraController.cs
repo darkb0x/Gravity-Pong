@@ -131,13 +131,13 @@ namespace GravityPong.Game.Singleplayer
 
         private void SubscrubeToEvents()
         {
-            _settingsData.OnPostProcessSettingsChanges += OnPostProcessEnableChange;
+            _settingsData.OnPostProcessSettingsChanged += OnPostProcessEnableChange;
 
             OnPostProcessEnableChange(_settingsData.PostProccesingEnabled);
         }
         private void UnsubscribeFromEvents()
         {
-            _settingsData.OnPostProcessSettingsChanges -= OnPostProcessEnableChange;
+            _settingsData.OnPostProcessSettingsChanged -= OnPostProcessEnableChange;
         }
 
         private void OnPostProcessEnableChange(bool value)

@@ -16,7 +16,7 @@ namespace GravityPong.Game.Singleplayer.Player
         private bool _paused;
         private float _changeDirSpeed;
 
-        private void Awake()
+        public void Initialize()
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
 

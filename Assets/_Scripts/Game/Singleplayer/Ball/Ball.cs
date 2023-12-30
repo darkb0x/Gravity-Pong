@@ -35,7 +35,7 @@ namespace GravityPong.Game.Singleplayer.Ball
         private bool _isReturning;
         private int _reboundsFromWallCount;
 
-        private void Awake()
+        public void Initialize()
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
 
@@ -43,9 +43,7 @@ namespace GravityPong.Game.Singleplayer.Ball
             _pauseService = Services.Instance.Get<IPauseService>();
 
             SubscribeToEvents();
-        }
-        private void Start()
-        {
+
             Restart(false);
         }
         private void OnDestroy()

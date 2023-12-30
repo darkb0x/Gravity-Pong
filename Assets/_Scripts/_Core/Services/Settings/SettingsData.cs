@@ -10,16 +10,25 @@ namespace GravityPong.Menu.Settings
         {
             public bool PostProcessEnabled;
             public bool CameraShakingEnabled;
+            public float ScreenScaleValue;
+            public int VSync;
+            public int TargetFramerate;
 
-            public SettingsSaveData(bool postProcessEnabled, bool cameraShakingEnabled)
+            public SettingsSaveData(bool postProcessEnabled, bool cameraShakingEnabled, float screenScaleValue, int vsync, int targetFramerate)
             {
                 PostProcessEnabled = postProcessEnabled;
                 CameraShakingEnabled = cameraShakingEnabled;
+                ScreenScaleValue = screenScaleValue;
+                VSync = vsync;
+                TargetFramerate = targetFramerate;
             }
         }
 
-        public Action<bool> OnPostProcessSettingsChanges { get; set; }
-        public Action<bool> OnCameraShakingSettingsChanges { get; set; }
+        public Action<bool> OnPostProcessSettingsChanged { get; set; }
+        public Action<bool> OnCameraShakingSettingsChanged { get; set; }
+        public Action<float> OnScreenScaleSettingsChanged { get; set; }
+        public Action<int> OnVSyncSettingsChanged { get; set; }
+        public Action<int> OnTargetFramerateSettingsChanged { get; set; }
 
         public bool PostProccesingEnabled
         {
@@ -27,7 +36,7 @@ namespace GravityPong.Menu.Settings
             set
             {
                 _postProcessEnabled = value;
-                OnPostProcessSettingsChanges?.Invoke(_postProcessEnabled);
+                OnPostProcessSettingsChanged?.Invoke(_postProcessEnabled);
             }
         }
         public bool CameraShaking {
@@ -35,12 +44,42 @@ namespace GravityPong.Menu.Settings
             set
             {
                 _cameraShakingEnabled = value;
-                OnCameraShakingSettingsChanges?.Invoke(_cameraShakingEnabled);
+                OnCameraShakingSettingsChanged?.Invoke(_cameraShakingEnabled);
+            }
+        }
+        public float ScreenScale
+        {
+            get => _screenScale;
+            set
+            {
+                _screenScale = Mathf.Clamp01(value);
+                OnScreenScaleSettingsChanged?.Invoke(_screenScale);
+            }
+        }
+        public int VSync
+        {
+            get => _vsync;
+            set
+            {
+                _vsync = value;
+                OnVSyncSettingsChanged?.Invoke(_vsync);
+            }
+        }
+        public int TargetFramerate
+        {
+            get => _targetFramerate;
+            set
+            {
+                _targetFramerate = Mathf.Clamp(value, 30, 320);
+                OnTargetFramerateSettingsChanged?.Invoke(_targetFramerate);
             }
         }
 
         private bool _postProcessEnabled;
         private bool _cameraShakingEnabled;
+        private float _screenScale;
+        private int _vsync;
+        private int _targetFramerate;
 
         public SettingsData()
         {
@@ -50,15 +89,28 @@ namespace GravityPong.Menu.Settings
                 _postProcessEnabled = true;
 
             _cameraShakingEnabled = true;
+            _screenScale = 1f;
+            _vsync = 1;
+            _targetFramerate = 60;
 
             // Events
-            OnPostProcessSettingsChanges += _ => Save();
-            OnCameraShakingSettingsChanges += _ => Save();
+            OnPostProcessSettingsChanged += _ => Save();
+            OnCameraShakingSettingsChanged += _ => Save();
+            OnScreenScaleSettingsChanged += _ => Save();
+            OnVSyncSettingsChanged += _ => Save();
+            OnTargetFramerateSettingsChanged += _ => Save();
         }
 
         public void Save()
         {
-            var saveData = new SettingsSaveData(_postProcessEnabled, _cameraShakingEnabled);
+            var saveData = new SettingsSaveData(
+                _postProcessEnabled,
+                _cameraShakingEnabled, 
+                _screenScale, 
+                _vsync,
+                _targetFramerate
+                );
+
             PlayerPrefs.SetString(Constants.PlayerPrefs.SETTINGS_PLAYERPREFS_KEY, JsonUtility.ToJson(saveData));
         }
 
@@ -73,6 +125,9 @@ namespace GravityPong.Menu.Settings
             var saveData = JsonUtility.FromJson<SettingsSaveData>(PlayerPrefs.GetString(Constants.PlayerPrefs.SETTINGS_PLAYERPREFS_KEY));
             PostProccesingEnabled = saveData.PostProcessEnabled;
             CameraShaking = saveData.CameraShakingEnabled;
+            ScreenScale = saveData.ScreenScaleValue;
+            VSync = saveData.VSync;
+            TargetFramerate = saveData.TargetFramerate;
         }
     }
 }
