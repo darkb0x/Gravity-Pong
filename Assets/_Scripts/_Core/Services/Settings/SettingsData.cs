@@ -111,18 +111,18 @@ namespace GravityPong.Menu.Settings
                 _targetFramerate
                 );
 
-            PlayerPrefs.SetString(Constants.PlayerPrefs.SETTINGS_PLAYERPREFS_KEY, JsonUtility.ToJson(saveData));
+            PlayerPrefs.SetString(Constants.PlayerPrefs.SETTINGS_KEY, JsonUtility.ToJson(saveData));
         }
 
         public void Load()
         {
-            if(!PlayerPrefs.HasKey(Constants.PlayerPrefs.SETTINGS_PLAYERPREFS_KEY))
+            if(!PlayerPrefs.HasKey(Constants.PlayerPrefs.SETTINGS_KEY))
             {
                 Save();
                 return;
             }
 
-            var saveData = JsonUtility.FromJson<SettingsSaveData>(PlayerPrefs.GetString(Constants.PlayerPrefs.SETTINGS_PLAYERPREFS_KEY));
+            var saveData = JsonUtility.FromJson<SettingsSaveData>(PlayerPrefs.GetString(Constants.PlayerPrefs.SETTINGS_KEY));
             PostProccesingEnabled = saveData.PostProcessEnabled;
             CameraShaking = saveData.CameraShakingEnabled;
             ScreenScale = saveData.ScreenScaleValue;

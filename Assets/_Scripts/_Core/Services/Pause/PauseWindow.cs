@@ -1,19 +1,25 @@
 using UnityEngine;
+using System;
+using TMPro;
 
 namespace GravityPong.Pause
 {
     public class PauseWindow : MonoBehaviour
     {
-        [SerializeField] private Menu.UIButton ResumeButton;
+        [SerializeField] private TMP_Text _highscoreText;
+        [Space]
+        [SerializeField] private Menu.UIButton ContinueButton;
+        [SerializeField] private Menu.UIButton MenuButton;
 
         private IPauseService _pauseService;
         private bool _isOpened;
 
-        public void Initialize()
+        public void Initialize(Action menuButtonAction)
         {
             _pauseService = Services.Instance.Get<IPauseService>();
 
-            ResumeButton.Initialize(Close);
+            ContinueButton.Initialize(Close);
+            MenuButton.Initialize(menuButtonAction);
         }
 
         private void Update()
@@ -34,6 +40,8 @@ namespace GravityPong.Pause
             _pauseService.Pause();
             Time.timeScale = 0f;
 
+            _highscoreText.text = "Highscore: " + PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_KEY);
+
             gameObject.SetActive(true);
         }
         public void Close()
@@ -43,7 +51,7 @@ namespace GravityPong.Pause
             Time.timeScale = 1f;
 
             gameObject.SetActive(false);
-            ResumeButton.Deselect();
+            ContinueButton.Deselect();
         }
     }
 }

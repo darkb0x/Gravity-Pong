@@ -1,3 +1,4 @@
+
 namespace GravityPong
 {
     public static class Constants
@@ -9,8 +10,10 @@ namespace GravityPong
 
         public static class PlayerPrefs
         {
-            public const string HIGHSCORE_PLAYERPREFS_KEY = "Highscore";
-            public const string SETTINGS_PLAYERPREFS_KEY = "Settings";
+            public const string HIGHSCORE_KEY = "Highscore";
+            public const string RECORD_OF_HITS_KEY = "Hits";
+            public const string RECORD_OF_TIME_KEY = "Time";
+            public const string SETTINGS_KEY = "Settings";
         }
 
         public static class Scenes

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using GravityPong.Pause;
 using System;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace GravityPong.Game.Singleplayer
 {
@@ -10,11 +11,14 @@ namespace GravityPong.Game.Singleplayer
     {
         [SerializeField] private TMP_Text DebugText;
         [Space]
-        [SerializeField] private TMP_Text ScoreText;
+        [SerializeField] private TMP_Text ScoreTitleText;
+        [SerializeField] private TMP_Text ScoreValueText;
+        [SerializeField] private GameObject NewScoreTextObj;
+        [Space]
         [SerializeField] private TMP_Text HitsText;
         [SerializeField] private TMP_Text TimeText;
-        [Space]
-        [SerializeField] private Menu.UIButton LeaveButton;
+        [SerializeField] private TMP_Text PreviousHitsText;
+        [SerializeField] private TMP_Text PreviousTimeText;
 
         [Header("Pause")]
         [SerializeField] private Menu.UIButton PauseButton;
@@ -25,8 +29,7 @@ namespace GravityPong.Game.Singleplayer
 
         public void Initialize(Action leaveButtonAction)
         {
-            PauseWindow.Initialize();
-            LeaveButton.Initialize(leaveButtonAction);
+            PauseWindow.Initialize(leaveButtonAction);
             PauseButton.Initialize(PauseWindow.Open);
 
             if (!Application.isEditor)
@@ -51,22 +54,37 @@ namespace GravityPong.Game.Singleplayer
         {
             if (score > previousHighscore)
             {
-                ScoreText.color = _newHighscoreTextColor;
-                ScoreText.text = score.ToString() + "!";
+                ScoreValueText.color = _newHighscoreTextColor;
+                ScoreTitleText.color = _newHighscoreTextColor;
+                ScoreValueText.text = score.ToString() + "!";
+                NewScoreTextObj.SetActive(true);
             }
             else
             {
-                ScoreText.color = _defaultTextColor;
-                ScoreText.text = score.ToString();
+                ScoreValueText.color = _defaultTextColor;
+                ScoreTitleText.color = _defaultTextColor;
+                ScoreValueText.text = score.ToString();
+                NewScoreTextObj.SetActive(false);
             }
         }
-        public void UpdateHitsText(int value)
+        public void UpdateHitsText(int value, int previous)
         {
-            HitsText.text = $"Hits: {value}";
+            if(value > previous)
+                HitsText.text = $"Hits: <color=#{ColorUtility.ToHtmlStringRGB(_newHighscoreTextColor)}>{value}";
+            else
+                HitsText.text = $"Hits: <color=#{ColorUtility.ToHtmlStringRGB(_defaultTextColor)}>{value}";
         }
-        public void UpdateTimeText(float value)
+        public void UpdateTimeText(float value, float previous)
         {
-            TimeText.text = $"Time: {value.ToString("F1")}s";
+            if (value > previous)
+                TimeText.text = $"Time: <color=#{ColorUtility.ToHtmlStringRGB(_newHighscoreTextColor)}>{value.ToString("F1")}s";
+            else
+                TimeText.text = $"Time: <color=#{ColorUtility.ToHtmlStringRGB(_defaultTextColor)}>{value.ToString("F1")}s";
+        }
+        public void UpdatePreviousGameDataText(int hits, float time)
+        {
+            PreviousHitsText.text = $"Hits: {hits}";
+            PreviousTimeText.text = $"Time: {time.ToString("F1")}s";
         }
     }
 }

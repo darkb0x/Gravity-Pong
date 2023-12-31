@@ -49,6 +49,8 @@ namespace GravityPong.Game.Singleplayer
 
             UpdateStyleHistory();
         }
+        public void ResetStyle()
+            => StartCoroutine(ResetStyleCoroutine());
 
         private void UpdateStyleTimeVisual(float value)
         {
@@ -63,6 +65,22 @@ namespace GravityPong.Game.Singleplayer
                     result += item;
             }
             StyleHistoryText.text = result;
+        }
+        private IEnumerator ResetStyleCoroutine()
+        {
+            float speed = 5;
+
+            while (StyleHistoryText.alpha > 0)
+            {
+                yield return null;
+                float alpha = Mathf.MoveTowards(StyleHistoryText.alpha, 0, speed * Time.deltaTime);
+                StyleHistoryText.alpha = alpha;
+            }
+
+            _styleHistory.Clear();
+            UpdateStyleHistory();
+
+            StyleHistoryText.alpha = 1f;
         }
     }
 }

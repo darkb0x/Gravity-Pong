@@ -23,6 +23,7 @@ namespace GravityPong.Menu
         {
             _uiPanelNavigator = uiPanelNavigator;
 
+            InitializePlayerPrefsSave();
             InitializeButtons();
             InitializeHighscoreText();
 
@@ -45,11 +46,20 @@ namespace GravityPong.Menu
         }
         private void InitializeHighscoreText()
         {
-            if (!PlayerPrefs.HasKey(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY))
-                PlayerPrefs.SetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY, 0);
-
-            int highscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY);
+            int highscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_KEY);
             HighscoreText.text = $"Highscore: {highscore}";
+        }
+
+        private static void InitializePlayerPrefsSave()
+        {
+            if (!PlayerPrefs.HasKey(Constants.PlayerPrefs.HIGHSCORE_KEY))
+                PlayerPrefs.SetInt(Constants.PlayerPrefs.HIGHSCORE_KEY, 0);
+            if (!PlayerPrefs.HasKey(Constants.PlayerPrefs.RECORD_OF_HITS_KEY))
+                PlayerPrefs.SetInt(Constants.PlayerPrefs.RECORD_OF_HITS_KEY, 0);
+            if (!PlayerPrefs.HasKey(Constants.PlayerPrefs.RECORD_OF_TIME_KEY))
+                PlayerPrefs.SetFloat(Constants.PlayerPrefs.RECORD_OF_TIME_KEY, 0);
+
+            PlayerPrefs.Save();
         }
 
         public void Select(MenuButton button)

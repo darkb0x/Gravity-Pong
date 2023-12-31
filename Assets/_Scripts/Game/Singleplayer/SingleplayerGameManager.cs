@@ -32,7 +32,7 @@ namespace GravityPong.Game.Singleplayer
             set
             {
                 _hits = value;
-                HUD.UpdateHitsText(_hits);
+                HUD.UpdateHitsText(_hits, _previousHits);
             }
         }
         public float CurrentTime
@@ -41,7 +41,7 @@ namespace GravityPong.Game.Singleplayer
             set
             {
                 _currentTime = value;
-                HUD.UpdateTimeText(_currentTime);
+                HUD.UpdateTimeText(_currentTime, _previousTime);
             }
         }
 
@@ -53,6 +53,8 @@ namespace GravityPong.Game.Singleplayer
         private bool _playTimer;
         private float _currentTime;
         private int _previousHighscore;
+        private int _previousHits;
+        private float _previousTime;
         private int _score;
         private int _hits;
 
@@ -64,12 +66,17 @@ namespace GravityPong.Game.Singleplayer
             _audioService = Services.Instance.Get<IAudioService>();
             _pauseService = Services.Instance.Get<IPauseService>();
 
-            _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY);
+            _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_KEY);
+            _previousHits = PlayerPrefs.GetInt(Constants.PlayerPrefs.RECORD_OF_HITS_KEY);
+            _previousTime = PlayerPrefs.GetFloat(Constants.PlayerPrefs.RECORD_OF_TIME_KEY);
 
             HUD.Initialize(LeaveToMenu);
             Stylemeter.Initialize();
             HUD.SetDebugText("...");
+            HUD.UpdatePreviousGameDataText(_previousHits, _previousTime);
 
+            Score = 0;
+            Hits = 0;
             CurrentTime = 0f;
 
             HUD.ClosePause();
@@ -129,14 +136,29 @@ namespace GravityPong.Game.Singleplayer
         {
             if(Score > _previousHighscore)
             {
-                PlayerPrefs.SetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY, Score);
-                _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_PLAYERPREFS_KEY);
+                PlayerPrefs.SetInt(Constants.PlayerPrefs.HIGHSCORE_KEY, Score);
+                _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_KEY);
             }
+            if(CurrentTime > _previousTime)
+            {
+                PlayerPrefs.SetFloat(Constants.PlayerPrefs.RECORD_OF_TIME_KEY, CurrentTime);
+                _previousTime = PlayerPrefs.GetFloat(Constants.PlayerPrefs.RECORD_OF_TIME_KEY);
+            }
+            if(Hits > _previousHits)
+            {
+                PlayerPrefs.SetInt(Constants.PlayerPrefs.RECORD_OF_HITS_KEY, Hits);
+                _previousHits = PlayerPrefs.GetInt(Constants.PlayerPrefs.RECORD_OF_HITS_KEY);
+            }
+            PlayerPrefs.Save();
 
             _camera.Shake(new Vector4(-10, 10, -4, 4), 1f, 0.7f);
 
             Score = 0;
             Hits = 0;
+            CurrentTime = 0;
+
+            Stylemeter.ResetStyle();
+            HUD.UpdatePreviousGameDataText(_previousHits, _previousTime);
         }
 
         public void StopTimer()
@@ -145,8 +167,8 @@ namespace GravityPong.Game.Singleplayer
         }
         public void StartTimer()
         {
-            _playTimer = true;
             CurrentTime = 0;
+            _playTimer = true;
         }
 
         private ScoreData CalculateScoreDataFromStyle(float style)
@@ -180,6 +202,7 @@ namespace GravityPong.Game.Singleplayer
         }
         private void LeaveToMenu()
         {
+            Time.timeScale = 1f;
             Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.MAIN_MENU_SCENE_NAME);
         }
     }
