@@ -23,7 +23,7 @@ public class ScreenSettings : MonoBehaviour
 
         _settingsData = Services.Instance.Get<ISettingsData>();
 
-        _mainRes = new Vector2(Screen.width, Screen.height);
+        _mainRes = new Vector2(Display.main.systemWidth, Display.main.systemHeight);
 
         SubscribeToEvents();
     }
@@ -34,7 +34,6 @@ public class ScreenSettings : MonoBehaviour
     private void OnScreenScaleChanged(float value)
     {
         Screen.SetResolution((int)(_mainRes.x * value), (int)(_mainRes.y * value), Screen.fullScreenMode);
-
         if (EnableDebug)
             Debug.Log("X " + Screen.width + " / Y " + Screen.height + " / scale " + value);
     }

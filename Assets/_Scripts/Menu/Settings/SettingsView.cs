@@ -9,7 +9,7 @@ namespace GravityPong.Menu.Settings
     public class SettingsView : MonoBehaviour
     {
         public const UIPanelID SETTINGS_PANEL_ID = UIPanelID.Menu_Settings;
-        private const float MIN_SCREEN_SCALE_SLIDER_VALUE = 0.5f;
+        private const float MIN_SCREEN_SCALE_SLIDER_VALUE = 0.35f;
         private const float MAX_SCREEN_SCALE_SLIDER_VALUE = 1f;
         private const int MIN_FPS = 30;
         private const int MAX_FPS = 320;
