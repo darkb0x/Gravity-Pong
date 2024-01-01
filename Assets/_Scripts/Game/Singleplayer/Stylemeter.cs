@@ -68,7 +68,7 @@ namespace GravityPong.Game.Singleplayer
         }
         private IEnumerator ResetStyleCoroutine()
         {
-            float speed = 5;
+            float speed = 2;
 
             while (StyleHistoryText.alpha > 0)
             {

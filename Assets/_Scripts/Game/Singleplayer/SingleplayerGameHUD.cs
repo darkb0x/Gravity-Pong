@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using GravityPong.Pause;
 using System;
-using UnityEngine.SocialPlatforms.Impl;
+using Random = UnityEngine.Random;
 
 namespace GravityPong.Game.Singleplayer
 {
@@ -19,6 +18,11 @@ namespace GravityPong.Game.Singleplayer
         [SerializeField] private TMP_Text TimeText;
         [SerializeField] private TMP_Text PreviousHitsText;
         [SerializeField] private TMP_Text PreviousTimeText;
+        [Space]
+        [SerializeField] private TMP_Text StreakText;
+        [SerializeField] private Animation StreakAnim;
+        [SerializeField] private RectTransform StreakObjRect;
+        [SerializeField] private Vector2 StreakTextPositionXClamp;
 
         [Header("Pause")]
         [SerializeField] private Menu.UIButton PauseButton;
@@ -85,6 +89,16 @@ namespace GravityPong.Game.Singleplayer
         {
             PreviousHitsText.text = $"Hits: {hits}";
             PreviousTimeText.text = $"Time: {time.ToString("F1")}s";
+        }
+
+        public void ShowStreak(int value)
+        {
+            StreakText.text = $"Streak: {value}";
+            StreakObjRect.localPosition =
+                new Vector3(Random.Range(StreakTextPositionXClamp.x, StreakTextPositionXClamp.y),
+                0,
+                0);
+            StreakAnim.Play();
         }
     }
 }

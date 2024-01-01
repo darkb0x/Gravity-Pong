@@ -52,11 +52,12 @@ namespace GravityPong.Game.Singleplayer
 
         private bool _playTimer;
         private float _currentTime;
-        private int _previousHighscore;
-        private int _previousHits;
         private float _previousTime;
         private int _score;
         private int _hits;
+        private int _previousHighscore;
+        private int _previousHits;
+        private int _maxStyleStreak;
 
         public void Initialize(CameraController camera)
         {
@@ -129,6 +130,15 @@ namespace GravityPong.Game.Singleplayer
                     var particle = BallParticlesController.Particles.Get();
                     particle.Play(instanceBall.position, Quaternion.identity, false);
                 });
+
+                _maxStyleStreak++;
+
+                if (_maxStyleStreak >= 2)
+                    HUD.ShowStreak(_maxStyleStreak);
+            }
+            else
+            {
+                _maxStyleStreak = 0;
             }
         }
 
@@ -156,6 +166,7 @@ namespace GravityPong.Game.Singleplayer
             Score = 0;
             Hits = 0;
             CurrentTime = 0;
+            _maxStyleStreak = 0;
 
             Stylemeter.ResetStyle();
             HUD.UpdatePreviousGameDataText(_previousHits, _previousTime);
