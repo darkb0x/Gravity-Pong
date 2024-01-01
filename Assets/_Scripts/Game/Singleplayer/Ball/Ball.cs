@@ -51,7 +51,7 @@ namespace GravityPong.Game.Singleplayer.Ball
 
         private void Update()
         {
-            if(transform.localPosition.y < DEATH_ZONE_Y)
+            if (transform.localPosition.y < DEATH_ZONE_Y)
             {
                 Restart();
             }
@@ -184,15 +184,13 @@ namespace GravityPong.Game.Singleplayer.Ball
 
         private void BounceFromWall()
         {
-            /*
             _reboundsFromWallCount++;
 
             if (_reboundsFromWallCount >= 2)
             {
-                float velocityDivider = 2f;
+                float velocityDivider = 1.6f;
                 _rigidbody2D.velocity /= velocityDivider;
             }
-            */
 
             PlaySound(BounceFromWallSound);
         }
