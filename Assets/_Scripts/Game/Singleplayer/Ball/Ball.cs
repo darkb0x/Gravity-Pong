@@ -184,6 +184,7 @@ namespace GravityPong.Game.Singleplayer.Ball
 
         private void BounceFromWall()
         {
+            /*
             _reboundsFromWallCount++;
 
             if (_reboundsFromWallCount >= 2)
@@ -191,6 +192,7 @@ namespace GravityPong.Game.Singleplayer.Ball
                 float velocityDivider = 2f;
                 _rigidbody2D.velocity /= velocityDivider;
             }
+            */
 
             PlaySound(BounceFromWallSound);
         }
