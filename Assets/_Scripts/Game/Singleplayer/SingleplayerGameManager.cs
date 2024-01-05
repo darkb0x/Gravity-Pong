@@ -2,20 +2,20 @@ using UnityEngine;
 using TMPro;
 using GravityPong.Pause;
 using GravityPong.Game.Singleplayer.Ball;
+using System;
 
 namespace GravityPong.Game.Singleplayer
 {
-    public class SingleplayerGameManager : MonoBehaviour
+    public class SingleplayerGameManager : MonoBehaviour, IGameModeManager
     {
-        public static SingleplayerGameManager Instance;
-
         [Header("HUD")]
-        [SerializeField] private SingleplayerGameHUD HUD;
         [SerializeField] private Stylemeter Stylemeter;
 
         [Header("Audio")]
         [SerializeField] private AudioClip BounceSoundPerfectStart;
         [SerializeField] private AudioClip BounceSoundPerfectEnd;
+
+        private IGameHUDWithAdditionalDataView _hud;
 
         public int Score 
         {
@@ -23,7 +23,7 @@ namespace GravityPong.Game.Singleplayer
             set 
             {
                 _score = value;
-                HUD.UpdateScoreText(_score, _previousHighscore);
+                _hud.UpdateScoreText(_score, _previousHighscore);
             }
         }
         public int Hits
@@ -33,7 +33,7 @@ namespace GravityPong.Game.Singleplayer
             {
                 _hits = value;
                 _previousRoundHits = value;
-                HUD.UpdateHitsText(_hits, _previousHits);
+                _hud.UpdateHitsText(_hits, _previousHits);
             }
         }
         public float CurrentTime
@@ -43,7 +43,7 @@ namespace GravityPong.Game.Singleplayer
             {
                 _currentTime = value;
                 _previoudRoundTime = value;
-                HUD.UpdateTimeText(_currentTime, _previousTime);
+                _hud.UpdateTimeText(_currentTime, _previousTime);
             }
         }
 
@@ -65,10 +65,10 @@ namespace GravityPong.Game.Singleplayer
         private int _previousRoundHits;
         private float _previoudRoundTime;
 
-        public void Initialize(CameraController camera)
+        public void Initialize(CameraController camera, IGameHUDWithAdditionalDataView hud, Action leaveToMenuAction)
         {
-            Instance = this;
             _camera = camera;
+            _hud = hud;
 
             _audioService = Services.Instance.Get<IAudioService>();
             _pauseService = Services.Instance.Get<IPauseService>();
@@ -81,17 +81,11 @@ namespace GravityPong.Game.Singleplayer
             Hits = 0;
             CurrentTime = 0f;
 
-            HUD.Initialize(LeaveToMenu);
+            _hud.Initialize(leaveToMenuAction);
             Stylemeter.Initialize();
 
-            HUD.SetDebugText("...");
-            HUD.UpdatePreviousGameDataText(_previousRoundHits, _previoudRoundTime);
-            HUD.ClosePause();
-        }
-
-        private void OnDestroy()
-        {
-            Instance = null;
+            _hud.UpdatePreviousGameDataText(_previousRoundHits, _previoudRoundTime);
+            _hud.ClosePause();
         }
 
         private void Update()
@@ -103,7 +97,7 @@ namespace GravityPong.Game.Singleplayer
                 
                 if(Input.GetKeyDown(KeyCode.Escape))
                 {
-                    HUD.OpenPause();
+                    _hud.OpenPause();
                 }
             }
         }
@@ -111,7 +105,7 @@ namespace GravityPong.Game.Singleplayer
         private void OnApplicationFocus(bool focus)
         {
             if(!Application.isEditor && !focus && !_pauseService.PauseEnabled)
-                HUD.OpenPause();
+                _hud.OpenPause();
         }
 
         public void AddScore(float style, Transform instanceBall)
@@ -140,7 +134,7 @@ namespace GravityPong.Game.Singleplayer
                 _maxStyleStreak++;
 
                 if (_maxStyleStreak >= 2)
-                    HUD.ShowStreak(_maxStyleStreak);
+                    _hud.ShowStreak(_maxStyleStreak);
             }
             else
             {
@@ -169,7 +163,7 @@ namespace GravityPong.Game.Singleplayer
 
             _camera.Shake(new Vector4(-10, 10, -4, 4), 1f, 0.7f);
 
-            HUD.UpdatePreviousGameDataText(_previousRoundHits, _previoudRoundTime);
+            _hud.UpdatePreviousGameDataText(_previousRoundHits, _previoudRoundTime);
 
             Score = 0;
             Hits = 0;
@@ -189,7 +183,7 @@ namespace GravityPong.Game.Singleplayer
             _playTimer = true;
         }
 
-        private ScoreData CalculateScoreDataFromStyle(float style)
+        public ScoreData CalculateScoreDataFromStyle(float style)
         {
             int score;
             string styleMessage;
@@ -217,11 +211,6 @@ namespace GravityPong.Game.Singleplayer
             }
 
             return new ScoreData(score, style, styleMessage);
-        }
-        private void LeaveToMenu()
-        {
-            Time.timeScale = 1f;
-            Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.MAIN_MENU_SCENE_NAME);
         }
     }
 }

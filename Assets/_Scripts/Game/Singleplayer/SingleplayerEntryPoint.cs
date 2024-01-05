@@ -10,14 +10,16 @@ namespace GravityPong.Game.Singleplayer
     {
         [SerializeField] private CameraController CameraController;
         [SerializeField] private SingleplayerGameManager GameManager;
+        [SerializeField] private SingleplayerGameHUD GameHUD;
         [SerializeField] private PlayerContoller Player;
         [SerializeField] private Ball.Ball Ball;
 
         protected override void InitializeEntries()
         {
-            GameManager.Initialize(CameraController);
+            GameManager.Initialize(CameraController, GameHUD, 
+                () => Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.SINGLEPLAYER_SCENE_NAME));
             Player.Initialize();
-            Ball.Initialize();
+            Ball.Initialize(GameManager);
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace GravityPong.Game.Singleplayer
+namespace GravityPong.Game
 {
     public struct ScoreData
     {

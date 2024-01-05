@@ -9,13 +9,18 @@ namespace GravityPong.Game.Singleplayer
 {
     public class Stylemeter : MonoBehaviour
     {
-        private const float SPEED = 0.5f;
         private const float STYLEMETER_IMAGE_COLOR_RETURN_TIME = 1.2f;
 
         [SerializeField] private TMP_Text StyleHistoryText;
         [SerializeField] private Gradient StylemeterColors;
         [Space]
         [SerializeField] private Image StylemeterImage;
+        [Space]
+        [SerializeField] private float DissapearStyleSpeed = 0.5f;
+        [SerializeField] private int MaxRowsInStory = 5;
+
+        public Action OnStyleEqualsZero;
+        public float Value => _stylemeterValue;
 
         private List<string> _styleHistory;
         private float _stylemeterValue;
@@ -30,7 +35,10 @@ namespace GravityPong.Game.Singleplayer
         }
         private void Update()
         {
-            _stylemeterValue = Mathf.Clamp01(_stylemeterValue -= SPEED * Time.deltaTime);
+            _stylemeterValue = Mathf.Clamp01(_stylemeterValue -= DissapearStyleSpeed * Time.deltaTime);
+            if (_stylemeterValue == 0)
+                OnStyleEqualsZero?.Invoke();
+
             UpdateStyleTimeVisual(_stylemeterValue);
 
             StylemeterImage.color = Color.Lerp(StylemeterImage.color, Color.white, STYLEMETER_IMAGE_COLOR_RETURN_TIME * Time.deltaTime);
@@ -40,7 +48,7 @@ namespace GravityPong.Game.Singleplayer
         {
             _stylemeterValue = Mathf.Clamp01(_stylemeterValue + scoreData.Style);
 
-            if (_styleHistory.Count == 5)
+            if (_styleHistory.Count == MaxRowsInStory)
                 _styleHistory.RemoveAt(4);
 
             Color color = StylemeterColors.Evaluate(scoreData.Style);

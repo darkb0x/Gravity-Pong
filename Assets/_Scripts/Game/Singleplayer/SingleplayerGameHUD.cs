@@ -6,10 +6,8 @@ using Random = UnityEngine.Random;
 
 namespace GravityPong.Game.Singleplayer
 {
-    public class SingleplayerGameHUD : MonoBehaviour
+    public class SingleplayerGameHUD : MonoBehaviour, IGameHUDWithAdditionalDataView
     {
-        [SerializeField] private TMP_Text DebugText;
-        [Space]
         [SerializeField] private TMP_Text ScoreTitleText;
         [SerializeField] private TMP_Text ScoreValueText;
         [SerializeField] private GameObject NewScoreTextObj;
@@ -35,9 +33,6 @@ namespace GravityPong.Game.Singleplayer
         {
             PauseWindow.Initialize(leaveButtonAction);
             PauseButton.Initialize(PauseWindow.Open);
-
-            if (!Application.isEditor)
-                DebugText.gameObject.SetActive(false);
         }
 
         public void OpenPause()
@@ -47,11 +42,6 @@ namespace GravityPong.Game.Singleplayer
         public void ClosePause()
         {
             PauseWindow.Close();
-        }
-
-        public void SetDebugText(string text)
-        {
-            DebugText.text = text;
         }
 
         public void UpdateScoreText(int score, int previousHighscore)

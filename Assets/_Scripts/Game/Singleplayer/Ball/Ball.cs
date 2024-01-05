@@ -24,6 +24,7 @@ namespace GravityPong.Game.Singleplayer.Ball
         [Header("Particles")]
         [SerializeField] private BallParticlesController BallParticles;
 
+        private IGameModeManager _gameManager;
         private Rigidbody2D _rigidbody2D;
         
         private IAudioService _audioService;
@@ -35,8 +36,9 @@ namespace GravityPong.Game.Singleplayer.Ball
         private bool _isReturning;
         private int _reboundsFromWallCount;
 
-        public void Initialize()
+        public void Initialize(IGameModeManager gameManager)
         {
+            _gameManager = gameManager;
             _rigidbody2D = GetComponent<Rigidbody2D>();
 
             _audioService = Services.Instance.Get<IAudioService>();
@@ -80,12 +82,12 @@ namespace GravityPong.Game.Singleplayer.Ball
             float returnSpeedLerp = 3f;
             float minDistance = 0.05f;
 
-            SingleplayerGameManager.Instance?.StopTimer();
+            _gameManager.StopTimer();
 
             // Restart game
             if (isGameLoop)
             {
-                SingleplayerGameManager.Instance?.Restart();
+                _gameManager.Restart();
             }
 
             // Set ball invulnerability
@@ -121,7 +123,7 @@ namespace GravityPong.Game.Singleplayer.Ball
                 _rigidbody2D.velocity = new Vector2(1.5f, 3f);
             }
 
-            SingleplayerGameManager.Instance?.StartTimer();
+            _gameManager.StartTimer();
         }
 
         private void EnableBall()
@@ -196,7 +198,7 @@ namespace GravityPong.Game.Singleplayer.Ball
         }
 
         private void AddScore(float style)
-            => SingleplayerGameManager.Instance.AddScore(style, transform);
+            => _gameManager.AddScore(style, transform);
         #endregion
 
         #region Events
