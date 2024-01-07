@@ -65,10 +65,10 @@ namespace GravityPong.Game.Singleplayer
         private int _previousRoundHits;
         private float _previoudRoundTime;
 
-        public void Initialize(CameraController camera, IGameHUDWithAdditionalDataView hud, Action leaveToMenuAction)
+        public void Initialize(CameraController camera, IGameHUD hud, Action leaveToMenuAction)
         {
             _camera = camera;
-            _hud = hud;
+            _hud = hud as IGameHUDWithAdditionalDataView;
 
             _audioService = Services.Instance.Get<IAudioService>();
             _pauseService = Services.Instance.Get<IPauseService>();

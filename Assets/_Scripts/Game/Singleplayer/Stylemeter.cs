@@ -25,12 +25,10 @@ namespace GravityPong.Game.Singleplayer
         private List<string> _styleHistory;
         private float _stylemeterValue;
 
-        public void Initialize()
+        public void Initialize(float value = 0)
         {
             _styleHistory = new();
-            _stylemeterValue = 0f;
-
-            UpdateStyleTimeVisual(_stylemeterValue);
+            ResetStyle(value);
             UpdateStyleHistory();
         }
         private void Update()
@@ -49,7 +47,7 @@ namespace GravityPong.Game.Singleplayer
             _stylemeterValue = Mathf.Clamp01(_stylemeterValue + scoreData.Style);
 
             if (_styleHistory.Count == MaxRowsInStory)
-                _styleHistory.RemoveAt(4);
+                _styleHistory.RemoveAt(MaxRowsInStory - 1);
 
             Color color = StylemeterColors.Evaluate(scoreData.Style);
             _styleHistory.Insert(0, $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>+{scoreData.Score} {scoreData.StyleMessage}</color>\n");
@@ -59,6 +57,13 @@ namespace GravityPong.Game.Singleplayer
         }
         public void ResetStyle()
             => StartCoroutine(ResetStyleCoroutine());
+        public void ResetStyle(float startValue)
+        {
+            ResetStyle();
+
+            _stylemeterValue = startValue;
+            UpdateStyleTimeVisual(_stylemeterValue);
+        }
 
         private void UpdateStyleTimeVisual(float value)
         {

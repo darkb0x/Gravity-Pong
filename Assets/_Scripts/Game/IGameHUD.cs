@@ -8,6 +8,6 @@ namespace GravityPong.Game
         void UpdateScoreText(int score, int previousHighscore);
         void ClosePause();
         void OpenPause();
-        void ShowStreak(int maxStyleStreak);
+        void ShowStreak(int value);
     }
 }

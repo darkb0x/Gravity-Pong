@@ -298,23 +298,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 152672516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aabe6cde7a064bb42b5aecf113377720, type: 3}
+  m_Script: {fileID: 11500000, guid: 667af1999577b2644ae4a900011a5248, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugText: {fileID: 51044212}
   ScoreTitleText: {fileID: 1428108582}
   ScoreValueText: {fileID: 222948367}
   NewScoreTextObj: {fileID: 1765268658}
-  HitsText: {fileID: 0}
-  TimeText: {fileID: 0}
-  PreviousHitsText: {fileID: 0}
-  PreviousTimeText: {fileID: 0}
   StreakText: {fileID: 1958182529}
   StreakAnim: {fileID: 2137359263}
-  StreakObjRect: {fileID: 1958182528}
   StreakTextPositionXClamp: {x: -500, y: 500}
   PauseButton: {fileID: 1232949988}
-  PauseWindow: {fileID: 1488018007}
+  PauseWindow: {fileID: 297539700918226542}
 --- !u!1 &222948365
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,6 +631,7 @@ MonoBehaviour:
     m_NumColorKeys: 5
     m_NumAlphaKeys: 2
   StylemeterImage: {fileID: 1098523223}
+  DissapearStyleSpeed: 0.5
   MaxRowsInStory: 15
 --- !u!1 &683535660
 GameObject:
@@ -1380,7 +1375,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1402311370}
-  - component: {fileID: 1402311369}
+  - component: {fileID: 1402311371}
   m_Layer: 0
   m_Name: SceneEntryPoint
   m_TagString: Untagged
@@ -1388,22 +1383,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1402311369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402311368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f6c465f4978e824e81dbd5904ded59c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraController: {fileID: 1013850839}
-  GameManager: {fileID: 1766797046}
-  Player: {fileID: 1398130673}
-  Ball: {fileID: 1453672556}
 --- !u!4 &1402311370
 Transform:
   m_ObjectHideFlags: 0
@@ -1413,12 +1392,29 @@ Transform:
   m_GameObject: {fileID: 1402311368}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.13861527, y: -0.4254443, z: -0.1558232}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1402311371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402311368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af0801ac457a8b4483cd68ee2a5ebb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraController: {fileID: 1013850839}
+  GameManager: {fileID: 0}
+  GameHUD: {fileID: 0}
+  Player: {fileID: 1398130673}
+  Ball: {fileID: 1453672556}
 --- !u!1 &1426895562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1627,17 +1623,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0261df2f38c189b4f9ba393d6f32d2c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1488018007 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2009215122806051889, guid: 8ed5d0086deec5b44b9c67327dfe373d, type: 3}
-  m_PrefabInstance: {fileID: 297539700918226541}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbb8a37e0e0dc3c41967dfe0e6f6d5ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1765268658
 GameObject:
   m_ObjectHideFlags: 0
@@ -1814,10 +1799,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1766797044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed2fd92d637c2a241b73dc2bb44e61d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 8778fd20ec059344290b8d5e78cce5db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HUD: {fileID: 152672518}
   Stylemeter: {fileID: 464862620}
   BounceSoundPerfectStart: {fileID: 8300000, guid: f0eaf74a545a2dc4ba43fd2a381a75ae, type: 3}
   BounceSoundPerfectEnd: {fileID: 8300000, guid: d5ddc8de7da918f4ea2caffc48657d05, type: 3}
@@ -2059,11 +2043,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851920494}
   m_CullTransparentMesh: 1
---- !u!224 &1958182528 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8030383356128973486, guid: 053ea9d805839824a8729fdd103abdb8, type: 3}
-  m_PrefabInstance: {fileID: 1464456416968953157}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1958182529 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1779993471693536443, guid: 053ea9d805839824a8729fdd103abdb8, type: 3}
@@ -2302,6 +2281,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ed5d0086deec5b44b9c67327dfe373d, type: 3}
+--- !u!114 &297539700918226542 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2009215122806051889, guid: 8ed5d0086deec5b44b9c67327dfe373d, type: 3}
+  m_PrefabInstance: {fileID: 297539700918226541}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbb8a37e0e0dc3c41967dfe0e6f6d5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1313985033629626259
 PrefabInstance:
   m_ObjectHideFlags: 0

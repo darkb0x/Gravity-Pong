@@ -6,7 +6,7 @@ namespace GravityPong.Game
 {
     public interface IGameModeManager
     {
-        void Initialize(CameraController camera, IGameHUDWithAdditionalDataView hud, Action leaveToMenuAction);
+        void Initialize(CameraController camera, IGameHUD hud, Action leaveToMenuAction);
         void AddScore(float style, Transform ballInstance);
         void Restart();
         void StartTimer();
