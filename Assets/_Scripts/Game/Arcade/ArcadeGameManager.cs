@@ -19,8 +19,7 @@ namespace GravityPong.Game.Arcade
         [SerializeField] private AudioClip BounceSoundPerfectStart;
         [SerializeField] private AudioClip BounceSoundPerfectEnd;
 
-        private IGameHUD _hud;
-
+        public Action<int> OnScoreChanged { get => _onScoreChanged; set => _onScoreChanged = value; }
         public int Score
         {
             get => _score;
@@ -28,13 +27,16 @@ namespace GravityPong.Game.Arcade
             {
                 _score = value;
                 _hud.UpdateScoreText(_score, _previousHighscore);
+                OnScoreChanged?.Invoke(_score);
             }
         }
 
         private IAudioService _audioService;
         private IPauseService _pauseService;
+        private IGameHUD _hud;
 
         private CameraController _camera;
+        private Action<int> _onScoreChanged;
 
         private int _score;
 

@@ -9,6 +9,7 @@ namespace GravityPong.Game.Arcade
     public class ArcadeEntryPoint : SceneEntryPoint
     {
         [SerializeField] private CameraController CameraController;
+        [SerializeField] private ScreenColorController _screenColorController;
         [SerializeField] private ArcadeGameManager GameManager;
         [SerializeField] private ArcadeGameHUD GameHUD;
         [SerializeField] private PlayerContoller Player;
@@ -17,9 +18,12 @@ namespace GravityPong.Game.Arcade
         protected override void InitializeEntries()
         {
             GameManager.Initialize(CameraController, GameHUD,
-                () => Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.SINGLEPLAYER_SCENE_NAME));
+                () => {
+                    Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.SINGLEPLAYER_SCENE_NAME);
+                    });
             Player.Initialize();
             Ball.Initialize(GameManager);
+            _screenColorController.Initialize(GameManager, Camera.main);
         }
     }
 }

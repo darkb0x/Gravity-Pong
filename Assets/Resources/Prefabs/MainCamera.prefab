@@ -59,6 +59,7 @@ GameObject:
   m_Component:
   - component: {fileID: 857151802078331165}
   - component: {fileID: 6988695328204093371}
+  - component: {fileID: 36579962352253979}
   - component: {fileID: 8699417193910621782}
   - component: {fileID: 2564919147712440823}
   - component: {fileID: 3891155650990745926}
@@ -101,6 +102,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PostProcessLayer: {fileID: 3891155650990745926}
   StopTimePostProcessVolume: {fileID: 3916284368122754104}
+--- !u!114 &36579962352253979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3281120416463710501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810a809984707a14f97a1c8dfdf76ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _screenColors:
+  - RequiredScore: 0
+    Color: {r: 0, g: 0, b: 0, a: 0}
+  - RequiredScore: 100
+    Color: {r: 0, g: 0.047058824, b: 0.07058824, a: 0}
+  - RequiredScore: 200
+    Color: {r: 0, g: 0.05490196, b: 0.07058824, a: 0}
+  - RequiredScore: 300
+    Color: {r: 0, g: 0.06666667, b: 0.07058824, a: 0}
+  - RequiredScore: 400
+    Color: {r: 0, g: 0.07058824, b: 0.03529412, a: 0}
+  - RequiredScore: 500
+    Color: {r: 0.047058824, g: 0.07058824, b: 0, a: 0}
+  - RequiredScore: 600
+    Color: {r: 0.07058824, g: 0.07058824, b: 0, a: 0}
+  - RequiredScore: 700
+    Color: {r: 0.07058824, g: 0.05882353, b: 0, a: 0}
+  - RequiredScore: 800
+    Color: {r: 0.07058824, g: 0.03529412, b: 0, a: 0}
+  - RequiredScore: 900
+    Color: {r: 0.07058824, g: 0, b: 0, a: 0}
 --- !u!114 &8699417193910621782
 MonoBehaviour:
   m_ObjectHideFlags: 0

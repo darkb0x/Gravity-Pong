@@ -15,8 +15,7 @@ namespace GravityPong.Game.Singleplayer
         [SerializeField] private AudioClip BounceSoundPerfectStart;
         [SerializeField] private AudioClip BounceSoundPerfectEnd;
 
-        private IGameHUDWithAdditionalDataView _hud;
-
+        public Action<int> OnScoreChanged { get => _onScoreChanged; set => _onScoreChanged = value; }
         public int Score 
         {
             get => _score;
@@ -24,6 +23,7 @@ namespace GravityPong.Game.Singleplayer
             {
                 _score = value;
                 _hud.UpdateScoreText(_score, _previousHighscore);
+                OnScoreChanged?.Invoke(_score);
             }
         }
         public int Hits
@@ -49,8 +49,10 @@ namespace GravityPong.Game.Singleplayer
 
         private IAudioService _audioService;
         private IPauseService _pauseService;
+        private IGameHUDWithAdditionalDataView _hud;
 
         private CameraController _camera;
+        private Action<int> _onScoreChanged;
 
         private bool _playTimer;
         private float _currentTime;

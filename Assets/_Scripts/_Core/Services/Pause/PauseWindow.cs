@@ -19,7 +19,10 @@ namespace GravityPong.Pause
             _pauseService = Services.Instance.Get<IPauseService>();
 
             ContinueButton.Initialize(Close);
-            MenuButton.Initialize(menuButtonAction);
+            MenuButton.Initialize(() => {
+                Close();
+                menuButtonAction.Invoke();
+                });
         }
 
         private void Update()
