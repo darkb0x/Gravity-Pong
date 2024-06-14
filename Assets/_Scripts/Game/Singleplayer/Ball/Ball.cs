@@ -134,7 +134,6 @@ namespace GravityPong.Game.Singleplayer.Ball
         }
         private void DisableBall()
         {
-
             SetTransparentcyToSprite(DISABLED_SPRITE_ALPHA);
             _rigidbody2D.velocity = Vector2.zero;
             _rigidbody2D.isKinematic = true;

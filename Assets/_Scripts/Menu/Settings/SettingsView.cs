@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using GravityPong.Infrasturcture;
 using GravityPong.UI;
 using TMPro;
 
@@ -21,6 +20,7 @@ namespace GravityPong.Menu.Settings
         [SerializeField] private Slider ScreenScaleSlider;
         [SerializeField] private Toggle VSyncToggle;
         [SerializeField] private Slider TargetFramerateSlider;
+        [SerializeField] private GameObject _targetFramerateGameObj;
         [SerializeField] private TMP_Text CurrentMaxFPS_Text;
         [Space]
         [SerializeField] private UIButton CloseSettingsButton;
@@ -37,6 +37,8 @@ namespace GravityPong.Menu.Settings
             InitializeUIActions();
             LoadSaveData();
 
+            if(!Application.isEditor)
+                DebugMode = false;
             if (!DebugMode)
                 ScreenScaleSlider.gameObject.SetActive(Application.isMobilePlatform && !(Application.platform != RuntimePlatform.WebGLPlayer));
         }
@@ -56,7 +58,6 @@ namespace GravityPong.Menu.Settings
             TargetFramerateSlider.onValueChanged.AddListener(
                 new UnityEngine.Events.UnityAction<float>(value => SetTargetFramerateValue((int) value))
                 );
-
             CurrentMaxFPS_Text.text = _settingsData.TargetFramerate.ToString();
         }
         private void LoadSaveData()
@@ -66,6 +67,8 @@ namespace GravityPong.Menu.Settings
             ScreenScaleSlider.SetValueWithoutNotify(_settingsData.ScreenScale);
             VSyncToggle.SetIsOnWithoutNotify(_settingsData.VSync == 1);
             TargetFramerateSlider.SetValueWithoutNotify(_settingsData.TargetFramerate);
+
+            SetVSyncEnabled(_settingsData.VSync == 1);
         }
 
         private void SetPostProcessEnabled(bool value)
@@ -83,6 +86,7 @@ namespace GravityPong.Menu.Settings
         private void SetVSyncEnabled(bool value)
         {
             _settingsData.VSync = value ? 1 : 0;
+            _targetFramerateGameObj.SetActive(!value);
         }
         private void SetTargetFramerateValue(int value)
         {
