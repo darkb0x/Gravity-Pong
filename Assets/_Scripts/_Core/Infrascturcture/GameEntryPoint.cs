@@ -28,7 +28,6 @@ namespace GravityPong.Infrasturcture
             SceneManager.activeSceneChanged += OnSceneLoaded;
         }
 
-
         private void RegisterServices()
         {
             Services _services = new Services();
@@ -38,6 +37,7 @@ namespace GravityPong.Infrasturcture
             _services.Register<IAudioService>(new AudioService(gameObject, _services.Get<ICoroutineRunner>()));
             _services.Register<ISceneLoader>(new SceneLoader(_services.Get<ICoroutineRunner>()));
             _services.Register<ISettingsData>(new SettingsData());
+            _services.Register<IGameSaveDataController>(new GameSaveDataController());
             _services.Register<IPauseService>(new PauseService());
         }
 

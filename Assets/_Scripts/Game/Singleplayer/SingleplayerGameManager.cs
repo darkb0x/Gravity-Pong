@@ -22,7 +22,7 @@ namespace GravityPong.Game.Singleplayer
             set 
             {
                 _score = value;
-                _hud.UpdateScoreText(_score, _previousHighscore);
+                _hud.UpdateScoreText(_score, _saveData.Data.ClassicGameHighscore);
                 OnScoreChanged?.Invoke(_score);
             }
         }
@@ -32,8 +32,7 @@ namespace GravityPong.Game.Singleplayer
             set
             {
                 _hits = value;
-                _previousRoundHits = value;
-                _hud.UpdateHitsText(_hits, _previousHits);
+                _hud.UpdateHitsText(_hits, _saveData.Data.PreviousGameTry.Hits);
             }
         }
         public float CurrentTime
@@ -42,11 +41,11 @@ namespace GravityPong.Game.Singleplayer
             set
             {
                 _currentTime = value;
-                _previoudRoundTime = value;
-                _hud.UpdateTimeText(_currentTime, _previousTime);
+                _hud.UpdateTimeText(_currentTime, _saveData.Data.PreviousGameTry.Time);
             }
         }
 
+        private IGameSaveDataController _saveData;
         private IAudioService _audioService;
         private IPauseService _pauseService;
         private IGameHUDWithAdditionalDataView _hud;
@@ -56,28 +55,19 @@ namespace GravityPong.Game.Singleplayer
 
         private bool _playTimer;
         private float _currentTime;
-        private float _previousTime;
         private int _score;
         private int _hits;
 
-        private int _previousHighscore;
-        private int _previousHits;
         private int _maxStyleStreak;
-
-        private int _previousRoundHits;
-        private float _previoudRoundTime;
 
         public void Initialize(CameraController camera, IGameHUD hud, Action leaveToMenuAction)
         {
             _camera = camera;
             _hud = hud as IGameHUDWithAdditionalDataView;
 
+            _saveData = Services.Instance.Get<IGameSaveDataController>();
             _audioService = Services.Instance.Get<IAudioService>();
             _pauseService = Services.Instance.Get<IPauseService>();
-
-            _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_KEY);
-            _previousHits = PlayerPrefs.GetInt(Constants.PlayerPrefs.RECORD_OF_HITS_KEY);
-            _previousTime = PlayerPrefs.GetFloat(Constants.PlayerPrefs.RECORD_OF_TIME_KEY);
 
             Score = 0;
             Hits = 0;
@@ -86,7 +76,7 @@ namespace GravityPong.Game.Singleplayer
             _hud.Initialize(leaveToMenuAction);
             Stylemeter.Initialize();
 
-            _hud.UpdatePreviousGameDataText(_previousRoundHits, _previoudRoundTime);
+            _hud.UpdatePreviousGameDataText(_saveData.Data.PreviousGameTry.Hits, _saveData.Data.PreviousGameTry.Time);
             _hud.ClosePause();
         }
 
@@ -146,26 +136,25 @@ namespace GravityPong.Game.Singleplayer
 
         public void Restart()
         {
-            if(Score > _previousHighscore)
-            {
-                PlayerPrefs.SetInt(Constants.PlayerPrefs.HIGHSCORE_KEY, Score);
-                _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_KEY);
-            }
-            if(CurrentTime > _previousTime)
-            {
-                PlayerPrefs.SetFloat(Constants.PlayerPrefs.RECORD_OF_TIME_KEY, CurrentTime);
-                _previousTime = PlayerPrefs.GetFloat(Constants.PlayerPrefs.RECORD_OF_TIME_KEY);
-            }
-            if(Hits > _previousHits)
-            {
-                PlayerPrefs.SetInt(Constants.PlayerPrefs.RECORD_OF_HITS_KEY, Hits);
-                _previousHits = PlayerPrefs.GetInt(Constants.PlayerPrefs.RECORD_OF_HITS_KEY);
-            }
-            PlayerPrefs.Save();
+            var previousData = _saveData.Data.PreviousGameTry;
 
-            _camera.Shake(new Vector4(-10, 10, -4, 4), 1f, 0.7f);
+            if(Score > _saveData.Data.ClassicGameHighscore)
+            {
+                _saveData.Data.ClassicGameHighscore = Score;
+            }
 
-            _hud.UpdatePreviousGameDataText(_previousRoundHits, _previoudRoundTime);
+            previousData.Time = CurrentTime;
+            previousData.Hits = Hits;
+
+            _saveData.Save();
+
+            _camera.Shake(
+                range: new Vector4(-10, 10, -4, 4),
+                speed: 1f, 
+                duration: 0.7f
+                );
+
+            _hud.UpdatePreviousGameDataText(previousData.Hits, previousData.Time);
 
             Score = 0;
             Hits = 0;

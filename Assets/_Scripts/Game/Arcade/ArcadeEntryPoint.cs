@@ -19,7 +19,7 @@ namespace GravityPong.Game.Arcade
         {
             GameManager.Initialize(CameraController, GameHUD,
                 () => {
-                    Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.SINGLEPLAYER_SCENE_NAME);
+                    Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.MAIN_MENU_SCENE_NAME);
                     });
             Player.Initialize();
             Ball.Initialize(GameManager);

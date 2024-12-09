@@ -43,7 +43,8 @@ namespace GravityPong.Pause
             _pauseService.Pause();
             Time.timeScale = 0f;
 
-            _highscoreText.text = "Highscore: " + PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_KEY);
+            var saveData = Services.Instance.Get<IGameSaveDataController>().Data;
+            _highscoreText.text = "Highscore: " + (saveData.CurrentGameMode == 0 ? saveData.ClassicGameHighscore : saveData.ArcadeGameHighscore);
 
             gameObject.SetActive(true);
         }

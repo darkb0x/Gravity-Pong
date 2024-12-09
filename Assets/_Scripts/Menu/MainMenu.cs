@@ -10,8 +10,6 @@ namespace GravityPong.Menu
     {
         public const UIPanelID MAINMENU_PANEL_ID = UIPanelID.Menu_Main;
 
-        [SerializeField] private TMP_Text HighscoreText;
-        [Space]
         [SerializeField] private MenuButton PlayButton;
         [SerializeField] private MenuButton SettingsButton;
         [SerializeField] private MenuButton QuitButton;
@@ -23,11 +21,7 @@ namespace GravityPong.Menu
         {
             _uiPanelNavigator = uiPanelNavigator;
 
-            InitializePlayerPrefsSave();
             InitializeButtons();
-            InitializeHighscoreText();
-
-            _uiPanelNavigator.Open(MAINMENU_PANEL_ID);
         }
 
         private void InitializeButtons()
@@ -37,29 +31,12 @@ namespace GravityPong.Menu
             foreach (var btn in _buttons)
                 btn.Initialize(this);
 
-            PlayButton.Initialize(this, OpenSingleplayer);
+            PlayButton.Initialize(this, StartPlaying);
             SettingsButton.Initialize(this,OpenSettings);
             QuitButton.Initialize(this, Quit);
 
             if (Application.platform == RuntimePlatform.WebGLPlayer)
                 QuitButton.gameObject.SetActive(false);
-        }
-        private void InitializeHighscoreText()
-        {
-            int highscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.HIGHSCORE_KEY);
-            HighscoreText.text = $"Highscore: {highscore}";
-        }
-
-        private static void InitializePlayerPrefsSave()
-        {
-            if (!PlayerPrefs.HasKey(Constants.PlayerPrefs.HIGHSCORE_KEY))
-                PlayerPrefs.SetInt(Constants.PlayerPrefs.HIGHSCORE_KEY, 0);
-            if (!PlayerPrefs.HasKey(Constants.PlayerPrefs.RECORD_OF_HITS_KEY))
-                PlayerPrefs.SetInt(Constants.PlayerPrefs.RECORD_OF_HITS_KEY, 0);
-            if (!PlayerPrefs.HasKey(Constants.PlayerPrefs.RECORD_OF_TIME_KEY))
-                PlayerPrefs.SetFloat(Constants.PlayerPrefs.RECORD_OF_TIME_KEY, 0);
-
-            PlayerPrefs.Save();
         }
 
         public void Select(MenuButton button)
@@ -71,10 +48,9 @@ namespace GravityPong.Menu
             button.Select();
         }
 
-        private void OpenSingleplayer()
+        private void StartPlaying()
         {
-            Services.Instance.Get<ISceneLoader>().LoadScene(Constants.Scenes.SINGLEPLAYER_SCENE_NAME);
-            PlayButton.Button.interactable = false;
+            _uiPanelNavigator.Open(UIPanelID.Menu_GameMode);
         }
         private void OpenSettings()
         {

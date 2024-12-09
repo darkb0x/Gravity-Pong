@@ -26,11 +26,12 @@ namespace GravityPong.Game.Arcade
             set
             {
                 _score = value;
-                _hud.UpdateScoreText(_score, _previousHighscore);
+                _hud.UpdateScoreText(_score, _saveData.Data.ArcadeGameHighscore);
                 OnScoreChanged?.Invoke(_score);
             }
         }
 
+        private IGameSaveDataController _saveData;
         private IAudioService _audioService;
         private IPauseService _pauseService;
         private IGameHUD _hud;
@@ -39,8 +40,6 @@ namespace GravityPong.Game.Arcade
         private Action<int> _onScoreChanged;
 
         private int _score;
-
-        private int _previousHighscore;
         private int _maxStyleStreak;
 
         public void Initialize(CameraController camera, IGameHUD hud, Action leaveToMenuAction)
@@ -50,8 +49,7 @@ namespace GravityPong.Game.Arcade
 
             _audioService = Services.Instance.Get<IAudioService>();
             _pauseService = Services.Instance.Get<IPauseService>();
-
-            _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.ARCADE_HIGHSCORE_KEY);
+            _saveData = Services.Instance.Get<IGameSaveDataController>();
 
             Score = 0;
 
@@ -80,13 +78,12 @@ namespace GravityPong.Game.Arcade
 
         public void Restart()
         {
-            if (Score > _previousHighscore)
+            if (Score > _saveData.Data.ArcadeGameHighscore)
             {
-                PlayerPrefs.SetInt(Constants.PlayerPrefs.ARCADE_HIGHSCORE_KEY, Score);
-                _previousHighscore = PlayerPrefs.GetInt(Constants.PlayerPrefs.ARCADE_HIGHSCORE_KEY);
+                _saveData.Data.ArcadeGameHighscore = Score;
             }
 
-            PlayerPrefs.Save();
+            _saveData.Save();
 
             _camera.Shake(new Vector4(-10, 10, -4, 4), 1f, 0.7f);
 

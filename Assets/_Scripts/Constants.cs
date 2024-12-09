@@ -21,7 +21,7 @@ namespace GravityPong
         public static class Scenes
         {
             public const string MAIN_MENU_SCENE_NAME = "_MainMenu";
-            public const string SINGLEPLAYER_SCENE_NAME = "SingleplayerScene";
+            public const string CLASSIC_GAME_SCENE_NAME = "SingleplayerScene";
             public const string ARCADE_GAME_SCENE_NAME = "ArcadeGameScene";
         }
     }

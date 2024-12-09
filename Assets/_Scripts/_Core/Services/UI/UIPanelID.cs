@@ -4,5 +4,6 @@ namespace GravityPong.UI
     {
         Menu_Main,
         Menu_Settings,
+        Menu_GameMode,
     } 
 }
