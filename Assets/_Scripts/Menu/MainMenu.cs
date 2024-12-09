@@ -41,24 +41,28 @@ namespace GravityPong.Menu
 
         public void Select(MenuButton button)
         {
-            foreach (var btn in _buttons)
-            {
-                btn.Deselect();
-            }
+            DeselectAll();
             button.Select();
+        }
+        private void DeselectAll()
+        {
+            foreach (var item in _buttons) item.Deselect();
         }
 
         private void StartPlaying()
         {
             _uiPanelNavigator.Open(UIPanelID.Menu_GameMode);
+            DeselectAll();
         }
         private void OpenSettings()
         {
             _uiPanelNavigator.Open(SettingsView.SETTINGS_PANEL_ID);
+            DeselectAll();
         }
         private void Quit()
         {
             Application.Quit();
+            DeselectAll();
         }
     }
 }

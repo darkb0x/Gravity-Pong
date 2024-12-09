@@ -37,6 +37,8 @@ namespace GravityPong.Menu
             _closeButton.Initialize(Close);
             _classicGameModeButton.Initialize(StartClassicGameMode);
             _arcadeGameModeButton.Initialize(StartArcadeGameMode);
+
+            _arcadeGameModeButton.Button.interactable = false;
         }
         private void InitializeHighscores()
         {

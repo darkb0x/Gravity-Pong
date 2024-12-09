@@ -31,12 +31,6 @@ public class ScreenSettings : MonoBehaviour
     private void OnDestroy()
         => UnsubscribeFromEvents();
 
-    private void OnScreenScaleChanged(float value)
-    {
-        Screen.SetResolution((int)(_mainRes.x * value), (int)(_mainRes.y * value), Screen.fullScreenMode);
-        if (EnableDebug)
-            Debug.Log("X " + Screen.width + " / Y " + Screen.height + " / scale " + value);
-    }
     private void OnVSyncChanged(int value)
     {
         QualitySettings.vSyncCount = value;
@@ -54,11 +48,9 @@ public class ScreenSettings : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        _settingsData.OnScreenScaleSettingsChanged += OnScreenScaleChanged;
         _settingsData.OnVSyncSettingsChanged += OnVSyncChanged;
         _settingsData.OnTargetFramerateSettingsChanged += OnTargetFramerateChanged;
 
-        OnScreenScaleChanged(_settingsData.ScreenScale);
         OnVSyncChanged(_settingsData.VSync);
         OnTargetFramerateChanged(_settingsData.TargetFramerate);
     }
@@ -67,7 +59,6 @@ public class ScreenSettings : MonoBehaviour
         if (_settingsData == null)
             return;
 
-        _settingsData.OnScreenScaleSettingsChanged -= OnScreenScaleChanged;
         _settingsData.OnVSyncSettingsChanged -= OnVSyncChanged;
         _settingsData.OnTargetFramerateSettingsChanged -= OnTargetFramerateChanged;
     }

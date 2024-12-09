@@ -8,8 +8,6 @@ namespace GravityPong.Menu.Settings
     public class SettingsView : MonoBehaviour
     {
         public const UIPanelID SETTINGS_PANEL_ID = UIPanelID.Menu_Settings;
-        private const float MIN_SCREEN_SCALE_SLIDER_VALUE = 0.35f;
-        private const float MAX_SCREEN_SCALE_SLIDER_VALUE = 1f;
         private const int MIN_FPS = 30;
         private const int MAX_FPS = 320;
 
@@ -17,7 +15,6 @@ namespace GravityPong.Menu.Settings
         [Space]
         [SerializeField] private Toggle PostPocessToggle;
         [SerializeField] private Toggle CameraShakingToggle;
-        [SerializeField] private Slider ScreenScaleSlider;
         [SerializeField] private Toggle VSyncToggle;
         [SerializeField] private Slider TargetFramerateSlider;
         [SerializeField] private GameObject _targetFramerateGameObj;
@@ -39,21 +36,16 @@ namespace GravityPong.Menu.Settings
 
             if(!Application.isEditor)
                 DebugMode = false;
-            if (!DebugMode)
-                ScreenScaleSlider.gameObject.SetActive(Application.isMobilePlatform && !(Application.platform != RuntimePlatform.WebGLPlayer));
         }
 
         private void InitializeUIActions()
         {
             CloseSettingsButton.Initialize(CloseSettings);
-            ScreenScaleSlider.minValue = MIN_SCREEN_SCALE_SLIDER_VALUE;
-            ScreenScaleSlider.maxValue = MAX_SCREEN_SCALE_SLIDER_VALUE;
             TargetFramerateSlider.minValue = MIN_FPS;
             TargetFramerateSlider.maxValue = MAX_FPS;
 
             PostPocessToggle.onValueChanged.AddListener(SetPostProcessEnabled);
             CameraShakingToggle.onValueChanged.AddListener(SetCameraShakingEnabled);
-            ScreenScaleSlider.onValueChanged.AddListener(SetScreenScaleValue);
             VSyncToggle.onValueChanged.AddListener(SetVSyncEnabled);
             TargetFramerateSlider.onValueChanged.AddListener(
                 new UnityEngine.Events.UnityAction<float>(value => SetTargetFramerateValue((int) value))
@@ -64,7 +56,6 @@ namespace GravityPong.Menu.Settings
         {
             PostPocessToggle.SetIsOnWithoutNotify(_settingsData.PostProccesingEnabled);
             CameraShakingToggle.SetIsOnWithoutNotify(_settingsData.CameraShaking);
-            ScreenScaleSlider.SetValueWithoutNotify(_settingsData.ScreenScale);
             VSyncToggle.SetIsOnWithoutNotify(_settingsData.VSync == 1);
             TargetFramerateSlider.SetValueWithoutNotify(_settingsData.TargetFramerate);
 
@@ -78,10 +69,6 @@ namespace GravityPong.Menu.Settings
         private void SetCameraShakingEnabled(bool value)
         {
             _settingsData.CameraShaking = value;
-        }
-        private void SetScreenScaleValue(float value)
-        {
-            _settingsData.ScreenScale = value;
         }
         private void SetVSyncEnabled(bool value)
         {

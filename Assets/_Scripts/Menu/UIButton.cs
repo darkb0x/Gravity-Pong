@@ -38,11 +38,13 @@ namespace GravityPong.Menu
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            Select();
+            if(Button.interactable)
+                Select();
         }
         public virtual void OnPointerExit(PointerEventData eventData)
         {
-            Deselect();
+            if(Button.interactable)
+                Deselect();
         }
     }
 }
